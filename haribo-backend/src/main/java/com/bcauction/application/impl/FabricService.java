@@ -61,8 +61,8 @@ public class FabricService implements IFabricService
 		ownership.setOwner_id(owner);
 		ownership.setItem_id(item_id);
 		ownership.setPossession_start_date(asset.getCreatedAt());
-
 		long result = this.ownershipRepository.create(ownership);
+		System.out.println("확인"+result);
 		if(result == 0)
 			return null;
 

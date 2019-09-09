@@ -63,6 +63,7 @@ public class DigitalWorkController
 
 	@RequestMapping(value = "/works", method = RequestMethod.PUT)
 	public DigitalWork update(@RequestBody DigitalWork work) {
+		System.out.println(work+"확인");
 		DigitalWork updated_item = digitalWorkService.updateItemInfo(work);
 		if (updated_item == null) {
 			logger.error("NOT FOUND WORK ID: ", work.getId());
