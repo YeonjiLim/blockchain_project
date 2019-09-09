@@ -445,6 +445,7 @@ public class FabricCCService implements IFabricCCService
 	{
 		FabricAsset asset = new FabricAsset();
 
+		
 		asset.setAssetId(rec.getString("assetID"));
 		asset.setOwner(rec.getString("owner"));
 		asset.setCreatedAt(rec.getString("createdAt"));
