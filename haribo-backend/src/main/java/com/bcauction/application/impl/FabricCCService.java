@@ -285,7 +285,7 @@ public class FabricCCService implements IFabricCCService
 			if(event.getBlockEvent() != null) {
 				return true;
 			}
-		} catch (ProposalException | InvalidArgumentException e) {
+		} catch (ProposalException | InvalidArgumentException | InterruptedException | ExecutionException | TimeoutException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -320,6 +320,15 @@ public class FabricCCService implements IFabricCCService
 		} catch (ProposalException | InvalidArgumentException e) {
 			e.printStackTrace();
 			return false;
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -351,6 +360,15 @@ public class FabricCCService implements IFabricCCService
 		} catch (ProposalException | InvalidArgumentException e) {
 			e.printStackTrace();
 			return false;
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return false;
 	}
