@@ -1,5 +1,5 @@
 var worksCreateView = Vue.component("worksCreateView", {
-    template: `
+  template: `
         <div>
             <v-nav></v-nav>
             <v-breadcrumb title="작품 등록" description="새로운 작품을 등록합니다."></v-breadcrumb>
@@ -28,36 +28,38 @@ var worksCreateView = Vue.component("worksCreateView", {
             </div>
         </div>
     `,
-    data(){
-        return {
-            work: {
-                name: "",
-                description: "",
-                isActive: true,
-                status: true
-            },
-            sharedStates: store.state
-        }
-    },
-    methods: {
-        save: function(){
-            var scope = this;
+  data() {
+    return {
+      work: {
+        name: "",
+        description: "",
+        isActive: true,
+        status: true
+      },
+      sharedStates: store.state
+    };
+  },
+  methods: {
+    save: function() {
+      var scope = this;
 
-            workService.create({
-                "name": this.work.name,
-                "explanation": this.work.description,
-                "disclosure": this.work.isActive ? "Y" : "N",
-                "status": this.work.status ? "Y" : "N",
-                "member_id": this.sharedStates.user.id
-            },
-            function(){
-                alert('작품이 등록되었습니다.');
-                scope.$router.push('/artworks');
-            },
-            function(error){
-                console.log(error);
-                alert("입력폼을 모두 입력해주세요.");
-            });
+      workService.create(
+        {
+          name: this.work.name,
+          explanation: this.work.description,
+          disclosure: this.work.isActive ? "Y" : "N",
+          status: this.work.status ? "Y" : "N",
+          member_id: this.sharedStates.user.id
+        },
+        function() {
+          alert("작품이 등록되었습니다.");
+          scope.$router.push("/artworks");
+        },
+        function(error) {
+          console.log(error);
+          alert("입력폼을 모두 입력해주세요.");
         }
+      );
     }
+  }
 });

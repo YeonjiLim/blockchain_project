@@ -29,48 +29,48 @@ var walletInfoView = Vue.component("walletInfoView", {
             </div>
         </div>
     `,
-    data() {
-        return {
-            wallet: {
-                id:0,
-                owner_id:0,
-                address: "",
-                balance: 0,
-                charge_count: 0
-            },
-            isCharging: false,          // 현재 코인을 충전하고 있는 중인지 확인하는 변수
-            sharedState: store.state
-        }
+  data() {
+    return {
+      wallet: {
+        id: 0,
+        owner_id: 0,
+        address: "",
+        balance: 0,
+        charge_count: 0
+      },
+      isCharging: false, // 현재 코인을 충전하고 있는 중인지 확인하는 변수
+      sharedState: store.state
+    };
+  },
+  methods: {
+    // ETH 충전하기
+    charge: function() {
+      var scope = this;
+      scope.isCharging = true;
+      walletService.chargeEther(this.wallet.address, function(response) {
+        scope.isCharging = false;
+        console.log(response);
+        alert("코인이 충전 되었습니다.");
+        scope.fetchWalletInfo();
+      });
     },
-    methods: {
-        // ETH 충전하기
-        charge: function(){
-            var scope = this;
-            scope.isCharging = true;
-            walletService.chargeEther(this.wallet.address, function(response){
-                scope.isCharging = false;
-                console.log(response);
-                alert("코인이 충전 되었습니다.");
-                scope.fetchWalletInfo();
-            })
-        },
-        // 지갑 정보 가져오기
-        fetchWalletInfo: function(){
-            var scope = this;
+    // 지갑 정보 가져오기
+    fetchWalletInfo: function() {
+      var scope = this;
 
-            walletService.findById(this.sharedState.user.id, function(data){
-                // TODO API 호출로 지갑 정보를 가져와 보여줍니다. 
-                // web3를 사용하여 잔액을 조회해 보는 것도 포함해보도록 합니다. 
-                console.log(data);
-                scope.wallet.id = data.id;
-                scope.wallet.owner_id = data.owner_id;
-                scope.wallet.address = data.address;
-                scope.wallet.balance = data.balance;
-                scope.wallet.charge_count = data.charge_count;
-            });
-        },
-    },
-    
+      walletService.findById(this.sharedState.user.id, function(data) {
+        // TODO API 호출로 지갑 정보를 가져와 보여줍니다.
+        // web3를 사용하여 잔액을 조회해 보는 것도 포함해보도록 합니다.
+        console.log(data);
+        scope.wallet.id = data.id;
+        scope.wallet.owner_id = data.owner_id;
+        scope.wallet.address = data.address;
+        scope.wallet.balance = data.balance;
+        scope.wallet.charge_count = data.charge_count;
+      });
+    }
+  },
+
   mounted: function() {
     this.fetchWalletInfo();
   }

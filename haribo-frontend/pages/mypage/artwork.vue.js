@@ -1,5 +1,5 @@
-var myArtworkView = Vue.component('MyArtworkView', {
-    template: `
+var myArtworkView = Vue.component("MyArtworkView", {
+  template: `
         <div>
             <v-nav></v-nav>
             <v-breadcrumb title="마이페이지" description="지갑을 생성하거나 작품을 업로드 할 수 있습니다."></v-breadcrumb>
@@ -52,50 +52,49 @@ var myArtworkView = Vue.component('MyArtworkView', {
             </div>
         </div>
     `,
-    data(){
-        return {
-            sharedStates: store.state,
-            artworks: [],
-            auctions: []
-        }
-    },
-    methods: {
-        calculateDate(date) {
-            var now = new Date();
-            var endDate = new Date(date);
-            var diff = endDate.getTime() - now.getTime();
+  data() {
+    return {
+      sharedStates: store.state,
+      artworks: [],
+      auctions: []
+    };
+  },
+  methods: {
+    calculateDate(date) {
+      var now = new Date();
+      var endDate = new Date(date);
+      var diff = endDate.getTime() - now.getTime();
 
-            // 만약 종료일자가 지났다면 "경매 마감"을 표시한다.
-            if(diff < 0) {
-                return "경매 마감";
-            } else {
-                // UNIX Timestamp를 자바스크립트 Date객체로 변환한다.
-                var d = new Date(diff);
-                var days = d.getDate();
-                var hours = d.getHours();
-                var minutes = d.getMinutes();
+      // 만약 종료일자가 지났다면 "경매 마감"을 표시한다.
+      if (diff < 0) {
+        return "경매 마감";
+      } else {
+        // UNIX Timestamp를 자바스크립트 Date객체로 변환한다.
+        var d = new Date(diff);
+        var days = d.getDate();
+        var hours = d.getHours();
+        var minutes = d.getMinutes();
 
-                return "남은시간: " + days + "일 " + hours + "시간 " + minutes + "분";
-            }
-        }
-    },
-    mounted: function(){
-        var scope = this;
-        var userId = this.sharedStates.user.id;
-
-        /**
-         * TODO 1. 회원의 작품 목록을 가져옵니다.
-         * Backend와 API 연동합니다.
-         * 작품 마다 소유권 이력을 보여줄 수 있어야 합니다.
-         */
-         // 여기에 작성하세요.
-
-        /**
-         * TODO 2. 회원의 경매 목록을 가져옵니다.
-         * Backend와 API 연동합니다.
-         * 경매 중인 작품 마다 소유권 이력을 보여줄 수 있어야 합니다.
-         */
-         // 여기에 작성하세요.
-
+        return "남은시간: " + days + "일 " + hours + "시간 " + minutes + "분";
+      }
     }
-})
+  },
+  mounted: function() {
+    var scope = this;
+    var userId = this.sharedStates.user.id;
+
+    /**
+     * TODO 1. 회원의 작품 목록을 가져옵니다.
+     * Backend와 API 연동합니다.
+     * 작품 마다 소유권 이력을 보여줄 수 있어야 합니다.
+     */
+    // 여기에 작성하세요.
+
+    /**
+     * TODO 2. 회원의 경매 목록을 가져옵니다.
+     * Backend와 API 연동합니다.
+     * 경매 중인 작품 마다 소유권 이력을 보여줄 수 있어야 합니다.
+     */
+    // 여기에 작성하세요.
+  }
+});
