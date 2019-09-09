@@ -53,16 +53,16 @@ public class FabricService implements IFabricService
 	@Override
 	public Ownership registerPossession(final long owner, final long item_id)
 	{
-		System.out.println("registerPossession 함수 실행됨!!---------------------------");
-		FabricAsset asset = this.fabricCCService.registerOwnership(owner, item_id);
+		System.out.println("registerPossession 함수 실행됨!!----" + owner + " -- " + item_id);
+		FabricAsset asset = this.fabricCCService.registerOwnership(owner, item_id);	// 여기 null 되는거 해결하기
 		System.out.println(asset+"ggggg");
 		if(asset == null) return null;
 		Ownership ownership = new Ownership();
 		ownership.setOwner_id(owner);
 		ownership.setItem_id(item_id);
 		ownership.setPossession_start_date(asset.getCreatedAt());
-
 		long result = this.ownershipRepository.create(ownership);
+		System.out.println("확인"+result);
 		if(result == 0)
 			return null;
 

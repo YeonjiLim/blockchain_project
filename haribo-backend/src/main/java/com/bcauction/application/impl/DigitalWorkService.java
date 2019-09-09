@@ -11,8 +11,10 @@ import com.bcauction.application.IDigitalWorkService;
 import com.bcauction.application.IFabricCCService;
 import com.bcauction.application.IFabricService;
 import com.bcauction.domain.DigitalWork;
+import com.bcauction.domain.FabricAsset;
 import com.bcauction.domain.exception.ApplicationException;
 import com.bcauction.domain.repository.IDigitalWorkRepository;
+import com.bcauction.domain.repository.IOwnershipRepository;
 
 @Service
 public class DigitalWorkService implements IDigitalWorkService
@@ -21,7 +23,6 @@ public class DigitalWorkService implements IDigitalWorkService
 
 	private IDigitalWorkRepository digitalWorkRepository;
 	private IFabricService fabricService;
-	
 
 	@Autowired
 	public DigitalWorkService(IFabricService fabricService,
@@ -58,9 +59,10 @@ public class DigitalWorkService implements IDigitalWorkService
 	public DigitalWork registerItem(final DigitalWork item) {
 		// TODO.
 		digitalWorkRepository.add(item);
-		//digitalWorkRepository.search(member_id, name)
-		fabricService.registerPossession(item.getMember_id(), item.getId());
-		return item;
+		DigitalWork dw=digitalWorkRepository.search(item.getMember_id(),item.getName());
+		System.out.println(dw+"확인용");
+		fabricService.registerPossession(dw.getMember_id(), dw.getId());
+		return dw;
 	}
 
 	/**
@@ -73,7 +75,12 @@ public class DigitalWorkService implements IDigitalWorkService
 	public DigitalWork deleteItem(final long id)
 	{
 		// TODO
-		return null;
+		DigitalWork dw=digitalWorkRepository.search(id);
+		dw.setStatus("N");
+		digitalWorkRepository.update(dw);
+		fabricService.expirePossession(dw.getMember_id(), dw.getId());
+		digitalWorkRepository.delete(id);
+		return dw;
 	}
 
 	@Override
