@@ -58,8 +58,8 @@ public class DigitalWorkService implements IDigitalWorkService
 	public DigitalWork registerItem(final DigitalWork item) {
 		// TODO.
 		digitalWorkRepository.add(item);
-		//digitalWorkRepository.search(member_id, name)
-		fabricService.registerPossession(item.getMember_id(), item.getId());
+		DigitalWork dw = digitalWorkRepository.search(item.getMember_id(), item.getName());
+		fabricService.registerPossession(dw.getMember_id(), dw.getId());
 		return item;
 	}
 
@@ -72,6 +72,10 @@ public class DigitalWorkService implements IDigitalWorkService
 	@Override
 	public DigitalWork deleteItem(final long id)
 	{
+		System.out.println(id);
+		
+//		digitalWorkRepository.delete(id);
+//		fabricService.expirePossession(owner, id);
 		// TODO
 		return null;
 	}
