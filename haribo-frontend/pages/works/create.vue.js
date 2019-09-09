@@ -45,8 +45,8 @@ var worksCreateView = Vue.component("worksCreateView", {
 
             workService.create({
                 "name": this.work.name,
-                "description": this.work.description,
-                "isActive": this.work.isActive ? "Y" : "N",
+                "explanation": this.work.description,
+                "disclosure": this.work.isActive ? "Y" : "N",
                 "status": this.work.status ? "Y" : "N",
                 "member_id": this.sharedStates.user.id
             },
