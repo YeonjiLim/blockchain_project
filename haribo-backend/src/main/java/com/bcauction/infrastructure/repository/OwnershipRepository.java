@@ -101,7 +101,7 @@ public class OwnershipRepository implements IOwnershipRepository
 
 	@Override
 	public long create(final Ownership ownership) {
-		//StringBuilder sbSql = new StringBuilder("INSERT INTO 작품소유(owner_id,item_id,소유시작일자,소유종료일자) VALUES(?,?,?,?)");
+		StringBuilder sbSql = new StringBuilder("INSERT INTO possession_item(owner_id,item_id,possession_start_date,possession_end_date) VALUES(?,?,?,?)");
 		try {
 			Map<String, Object> paramMap = new HashMap<>();
 			paramMap.put("owner_id", ownership.getOwner_id());
@@ -110,7 +110,7 @@ public class OwnershipRepository implements IOwnershipRepository
 			paramMap.put("possession_end_date", ownership.getPossession_end_date());
 
 			this.simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-					.withTableName("작품소유")
+					.withTableName("possession_item")
 					.usingGeneratedKeyColumns("id");
 
 			Number newId = simpleJdbcInsert.executeAndReturnKey(paramMap);
