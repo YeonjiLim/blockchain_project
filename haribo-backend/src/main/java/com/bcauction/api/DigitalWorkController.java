@@ -1,3 +1,4 @@
+
 package com.bcauction.api;
 
 
@@ -52,13 +53,13 @@ public class DigitalWorkController
 
 	@RequestMapping(value = "/works/{id}", method = RequestMethod.GET)
 	public DigitalWork search(@PathVariable int id) {
-		DigitalWork 작품 = digitalWorkService.search(id);
-		if (작품 == null) {
+		DigitalWork item = digitalWorkService.search(id);
+		if (item == null) {
 			logger.error("NOT FOUND ID: ", id);
 			throw new NotFoundException(id + " 작품 정보를 찾을 수 없습니다.");
 		}
 
-		return 작품;
+		return item;
 	}
 
 	@RequestMapping(value = "/works", method = RequestMethod.PUT)

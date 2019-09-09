@@ -151,6 +151,7 @@ public class FabricCCService implements IFabricCCService
 		if(!res)
 			return null;
 		//queryHistory(item_id);
+		System.out.println("owner 값 : =-=----->> : " + owner + "item_id 값 : ----------> " + item_id + " res 값 : -------->" + res + "\n");
 		return query(item_id);
 	}
 
@@ -376,6 +377,8 @@ public class FabricCCService implements IFabricCCService
 		}
 		System.out.println("ㅎㅇ");
 		for (ProposalResponse pres : queryResponse) {
+			
+			
 		 // process the response here
 			//System.out.println(pres.get);
 			//private String assetId;
@@ -383,6 +386,7 @@ public class FabricCCService implements IFabricCCService
 			//private LocalDateTime createdAt;
 			//private LocalDateTime expiredAt;
 
+			
 		}
 		
 		return null;
@@ -392,6 +396,7 @@ public class FabricCCService implements IFabricCCService
 	{
 		FabricAsset asset = new FabricAsset();
 
+		
 		asset.setAssetId(rec.getString("assetID"));
 		asset.setOwner(rec.getString("owner"));
 		asset.setCreatedAt(rec.getString("createdAt"));

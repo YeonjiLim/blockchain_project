@@ -1,8 +1,6 @@
 var workService = {
     findAll: function(callback){   
         $.get(API_BASE_URL + "/api/works", function(data){
-            console.log(data);
-            
             callback(data);
         });
     },

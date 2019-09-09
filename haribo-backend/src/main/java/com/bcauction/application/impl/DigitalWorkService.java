@@ -58,9 +58,10 @@ public class DigitalWorkService implements IDigitalWorkService
 	public DigitalWork registerItem(final DigitalWork item) {
 		// TODO.
 		digitalWorkRepository.add(item);
+		DigitalWork dw = digitalWorkRepository.search(item.getMember_id(), item.getName());
 		//digitalWorkRepository.search(member_id, name)
-		fabricService.registerPossession(item.getMember_id(), item.getId());
-		return item;
+		fabricService.registerPossession(dw.getMember_id(), dw.getId());
+		return dw;
 	}
 
 	/**
