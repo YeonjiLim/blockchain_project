@@ -74,6 +74,10 @@ public class DigitalWorkService implements IDigitalWorkService
 	@Override
 	public DigitalWork deleteItem(final long id)
 	{
+		System.out.println(id);
+		
+//		digitalWorkRepository.delete(id);
+//		fabricService.expirePossession(owner, id);
 		// TODO
 		DigitalWork dw=digitalWorkRepository.search(id);
 		dw.setStatus("N");

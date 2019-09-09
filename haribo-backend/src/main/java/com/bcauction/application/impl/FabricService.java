@@ -124,6 +124,7 @@ public class FabricService implements IFabricService
 	@Override
 	public Ownership expirePossession(final long ownerid, final long item_id)
 	{
+		
 		FabricAsset asset = this.fabricCCService.expireOwnership(item_id, ownerid);
 		if(asset == null) return null;
 

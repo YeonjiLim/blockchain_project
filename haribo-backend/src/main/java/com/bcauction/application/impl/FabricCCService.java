@@ -5,14 +5,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
+import org.hyperledger.fabric.protos.common.Common.Block;
+import org.hyperledger.fabric.sdk.BlockEvent;
+import org.hyperledger.fabric.sdk.BlockListener;
 import org.hyperledger.fabric.sdk.ChaincodeID;
 import org.hyperledger.fabric.sdk.Channel;
 import org.hyperledger.fabric.sdk.Enrollment;
+import org.hyperledger.fabric.sdk.EventHub;
 import org.hyperledger.fabric.sdk.HFClient;
 import org.hyperledger.fabric.sdk.Orderer;
 import org.hyperledger.fabric.sdk.Peer;
@@ -34,6 +42,9 @@ import com.bcauction.application.IFabricCCService;
 import com.bcauction.domain.CommonUtil;
 import com.bcauction.domain.FabricAsset;
 import com.bcauction.domain.FabricUser;
+import com.fasterxml.jackson.databind.annotation.JsonAppend.Prop;
+
+import io.reactivex.Completable;
 @Service
 public class FabricCCService implements IFabricCCService
 {
@@ -150,38 +161,13 @@ public class FabricCCService implements IFabricCCService
 		boolean res = registerAsset(item_id, owner);
 		if(!res)
 			return null;
-		
-//		for (int i = 0; i < 1000000000; i++) {
-//			for (int j = 0; j < 10; j++) {
-//				
-//			}
-//		}
-		try {
-
-			Thread.sleep(3000); //1초 대기
-
-		} catch (InterruptedException e) {
-
-			e.printStackTrace();
-
-		}
-
 
 
 		res = confirmTimestamp(item_id);
 		//res= updateAssetOwnership(item_id,owner);
 		if(!res)
 			return null;
-		//queryHistory(item_id);
-		try {
-
-			Thread.sleep(3000); //1초 대기
-
-		} catch (InterruptedException e) {
-
-			e.printStackTrace();
-
-		}
+		
 		return query(item_id);
 	}
 
@@ -261,12 +247,17 @@ public class FabricCCService implements IFabricCCService
 		try {
 			responses = channel.sendTransactionProposal(qpr);
 			channel.sendTransaction(responses);
-			
-		} catch (ProposalException | InvalidArgumentException e) {
+			CompletableFuture<BlockEvent.TransactionEvent> txFuture = channel.sendTransaction(responses);
+			BlockEvent.TransactionEvent event = txFuture.get(600, TimeUnit.SECONDS);
+			if(event.getBlockEvent() != null) {
+				return true;
+			}
+		} catch (ProposalException | InvalidArgumentException | InterruptedException | ExecutionException | TimeoutException e) {
 			e.printStackTrace();
 			return false;
-		}
-		return true;
+		} 
+		
+		return false;
 	}
 
 	/**
@@ -278,7 +269,6 @@ public class FabricCCService implements IFabricCCService
 		// TODO
 		TransactionProposalRequest qpr = hfClient.newTransactionProposalRequest();
         ChaincodeID fabBoardCCId = ChaincodeID.newBuilder().setName("asset").build();
-        String stringResponse = null;
         qpr.setChaincodeID(fabBoardCCId);
 
         qpr.setFcn("confirmTimestamp");
@@ -290,12 +280,16 @@ public class FabricCCService implements IFabricCCService
 		try {
 			responses = channel.sendTransactionProposal(qpr);
 			channel.sendTransaction(responses);
-		} catch (ProposalException | InvalidArgumentException e) {
+			CompletableFuture<BlockEvent.TransactionEvent> txFuture = channel.sendTransaction(responses);
+			BlockEvent.TransactionEvent event = txFuture.get(600, TimeUnit.SECONDS);
+			if(event.getBlockEvent() != null) {
+				return true;
+			}
+		} catch (ProposalException | InvalidArgumentException | InterruptedException | ExecutionException | TimeoutException e) {
 			e.printStackTrace();
 			return false;
 		}
-		System.out.println("들어와요");
-		return true;
+		return false;
 	}
 
 	/**
@@ -318,11 +312,25 @@ public class FabricCCService implements IFabricCCService
 		try {
 			responses = channel.sendTransactionProposal(qpr);
 			channel.sendTransaction(responses);
+			CompletableFuture<BlockEvent.TransactionEvent> txFuture = channel.sendTransaction(responses);
+			BlockEvent.TransactionEvent event = txFuture.get(600, TimeUnit.SECONDS);
+			if(event.getBlockEvent() != null) {
+				return true;
+			}
 		} catch (ProposalException | InvalidArgumentException e) {
 			e.printStackTrace();
 			return false;
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -344,11 +352,25 @@ public class FabricCCService implements IFabricCCService
 		try {
 			responses = channel.sendTransactionProposal(qpr);
 			channel.sendTransaction(responses);
+			CompletableFuture<BlockEvent.TransactionEvent> txFuture = channel.sendTransaction(responses);
+			BlockEvent.TransactionEvent event = txFuture.get(600, TimeUnit.SECONDS);
+			if(event.getBlockEvent() != null) {
+				return true;
+			}
 		} catch (ProposalException | InvalidArgumentException e) {
 			e.printStackTrace();
 			return false;
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TimeoutException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -377,7 +399,6 @@ public class FabricCCService implements IFabricCCService
 		} catch (InvalidArgumentException | ProposalException e) {
 			e.printStackTrace();
 		}
-		System.out.println("ㅎㅇ2");
 		for (ProposalResponse pres : queryResponse) {
 		 // process the response here
 			//System.out.println(pres.get);
@@ -401,7 +422,7 @@ public class FabricCCService implements IFabricCCService
 	public FabricAsset query(final long item_id){
 		if(this.hfClient == null || this.channel == null)
 			loadChannel();
-		
+		FabricAsset fa = new FabricAsset();
 		QueryByChaincodeRequest queryRequest = hfClient.newQueryProposalRequest();
 		ChaincodeID ccid = ChaincodeID.newBuilder().setName("asset").build();
 		queryRequest.setChaincodeID(ccid); // ChaincodeId object as created in Invoke block
@@ -415,6 +436,9 @@ public class FabricCCService implements IFabricCCService
 		Collection<ProposalResponse> queryResponse = null;
 		try {
 			queryResponse = channel.queryByChaincode(queryRequest);
+			for (ProposalResponse pres : queryResponse) {
+				
+			}
 		} catch (InvalidArgumentException | ProposalException e) {
 			e.printStackTrace();
 		}
