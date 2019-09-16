@@ -99,6 +99,12 @@ contract Auction {
    */
   constructor(address _owner, uint workId, uint minimum, uint startTime, uint endTime) public {
     // todo 내용을 완성 합니다.  
+    require(minimum > 0);
+    digitalWorkId = workId;
+    minValue = minimum * 1 ether;
+    owner = _owner;
+    auctionStartTime = startTime;
+    auctionEndTime = endTime;
   }
 
   //**
@@ -114,6 +120,13 @@ contract Auction {
    */
   function withdraw() public returns (bool) {
     // todo 내용을 완성 합니다.  
+    uint amount = pendingReturns[msg.sender];
+      if(!msg.sender.send(amount)){
+          pendingReturns[msg.sender] = amount;
+          return false;
+      }
+      pendingReturns[msg.sender] = 0;
+      return true;
   }
 
   //**
@@ -123,6 +136,10 @@ contract Auction {
    */
   function endAuction() public onlyOwner {
     // todo 내용을 완성 합니다. 
+    _end();
+    _refund(false);
+    owner.transfer(highestBid);
+    emit AuctionEnded(highestBidder, highestBid);
   }
 
   //**
@@ -132,6 +149,12 @@ contract Auction {
    */
   function cancelAuction() public onlyOwner {
     // todo 내용을 완성 합니다. 
+    _end();
+    _refund(true);
+  }
+
+  function _end() internal{
+      ended = true;
   }
 
   //**
