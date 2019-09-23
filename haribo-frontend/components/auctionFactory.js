@@ -1,6 +1,6 @@
 // Web3 Object 생성
 function createWeb3(){
-    var web3 = new Web3(new Web3.providers.HttpProvider(BLOCKCHAIN_URL));
+    var web3 = new Web3(new Web3.providers.HttpProvider("http://54.180.148.38:8545"));
     return web3;
 }
 
@@ -36,10 +36,17 @@ function createAuction(options, walletAddress, privateKey, onConfirm){
         data: encodedABI
     }
      */  
-
+    var tx = {
+        from: walletAddress,
+        to: AUCTION_CONTRACT_ADDRESS,
+        gas: 2000000,
+        data: encodedABI
+    }
+    web3.eth.signTransaction(tx).then(console.log);
      /**
       * 트랜잭션 전자 서명 후 트랜잭션 전송/처리
       */
+
 }
 
 /**
@@ -48,7 +55,8 @@ function createAuction(options, walletAddress, privateKey, onConfirm){
  * 경매 컨트랙트 주소: options.contractAddress
  *  */ 
 function auction_bid(options, onConfirm){
-    
+    options.contractAddress
+
 }
 
 /**

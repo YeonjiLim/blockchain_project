@@ -89,9 +89,10 @@ public class DigitalWorkController
 	 * @param id
 	 * @return
 	 */
+	@RequestMapping(value = "/works/owner/{id}", method = RequestMethod.GET)
 	public List<DigitalWork> memberItemCheckList(@PathVariable int id){
 		List<DigitalWork> list = digitalWorkService.memberItemCheckList(id);
-
+		//System.out.println("AAA"+list);
 		if (list == null || list.isEmpty() )
 			throw new EmptyListException("사용자 소유의 작품이 없습니다.");
 
