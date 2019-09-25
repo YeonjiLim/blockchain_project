@@ -63,4 +63,11 @@ public class Wallet
 	public boolean canCharge(){
 		return this.charge_count < 10;
 	}
+
+	@Override
+	public String toString() {
+		return "Wallet [id=" + id + ", owner_id=" + owner_id + ", address=" + address + ", balance=" + balance
+				+ ", charge_count=" + charge_count + "]";
+	}
+	
 }
