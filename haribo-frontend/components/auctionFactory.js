@@ -530,24 +530,6 @@ function createAuction(options, walletAddress, privateKey, onConfirm){
      /**
       * 트랜잭션 전자 서명 후 트랜잭션 전송/처리
       */
-     var signPromise = web3.eth.accounts.signTransaction(tx, privateKey);
-     signPromise.then((signedTx) => {
-         // raw transaction string may be available in .raw or 
-         // .rawTransaction depending on which signTransaction
-         // function was called
-         const sentTx = web3.eth.sendSignedTransaction(signedTx.raw || signedTx.rawTransaction);
-         sentTx.on("receipt", receipt => {
-           var newaddress = web3.eth.abi.decodeParameters(['address','uint256','uint256','uint256','uint256'], receipt.logs[0].data);
-           console.log(newaddress);
-            onConfirm(newaddress);
-         });
-         sentTx.on("error", err => {
-           console.log(err)
-         });
-       }).catch((err) => {
-         alert("최저가를 확인해주세요")
-       });
-       
  
 }
 
