@@ -8,5 +8,6 @@ package com.bcauction.domain.wrapper;
  * 해당 패키지에  AuctionFactoryContract.java로 추가한다.
  */
 public class AuctionFactoryContract{
-
+	//abi쓰기위해서 컴파일이 되어있어야함
+	//CLI
 }

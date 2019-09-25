@@ -132,12 +132,12 @@ var auctionRegisterView = Vue.component('AuctionRegisterView', {
                     console.log(log);
                     var contractAddress = log.newAuction;
                     var data = {
-                        "경매생성자id": scope.sharedStates.user.id,
-                        "경매작품id": scope.before.selectedWork,
-                        "시작일시": new Date(scope.before.input.startDate),
-                        "종료일시": new Date(scope.before.input.untilDate),
-                        "최저가": Number(scope.before.input.minPrice),
-                        "컨트랙트주소": contractAddress,
+                        "auction_creater_id": scope.sharedStates.user.id,
+                        "auction_item_id": scope.before.selectedWork,
+                        "start_date": new Date(scope.before.input.startDate),
+                        "end_date": new Date(scope.before.input.untilDate),
+                        "lowest_price": Number(scope.before.input.minPrice),
+                        "contract_address": contractAddress,
                     }
 
                     // 3. 선택한 작업 정보를 가져옵니다.
