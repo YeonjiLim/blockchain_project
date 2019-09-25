@@ -59,6 +59,7 @@ public class WalletController {
 	@RequestMapping(value = "/wallets/of/{mid}", method = RequestMethod.GET)
 	public Wallet searchByOwner(@PathVariable long mid) {
 		Wallet wallet = this.walletService.search(mid);
+		//System.out.println(wallet+"AAA");
 		if(wallet == null)
 			throw new EmptyListException("[소유자id] " + mid + " 해당 wallet을 찾을 수 없습니다.");
 		return walletService.search_ETHBalanceSync(wallet.getAddress());
