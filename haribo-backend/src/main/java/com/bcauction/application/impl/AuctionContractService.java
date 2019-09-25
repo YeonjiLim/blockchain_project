@@ -1,12 +1,8 @@
 package com.bcauction.application.impl;
 
-import com.bcauction.application.IAuctionContractService;
-import com.bcauction.domain.*;
-import com.bcauction.domain.exception.ApplicationException;
-import com.bcauction.domain.exception.DomainException;
-import com.bcauction.domain.repository.IWalletRepository;
-import com.bcauction.domain.wrapper.AuctionContract;
-import com.bcauction.domain.wrapper.AuctionFactoryContract;
+import java.math.BigInteger;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
-import org.web3j.tuples.generated.Tuple7;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
 
-import java.math.BigInteger;
-import java.util.List;
+import com.bcauction.application.IAuctionContractService;
+import com.bcauction.domain.AuctionInfo;
+import com.bcauction.domain.repository.IWalletRepository;
+import com.bcauction.domain.wrapper.AuctionFactoryContract;
 
 /**
  * AuctionContractService
