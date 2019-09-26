@@ -1,31 +1,43 @@
 package com.bcauction.application.impl;
 
-import com.bcauction.application.IAuctionContractService;
-import com.bcauction.domain.*;
-import com.bcauction.domain.exception.ApplicationException;
-import com.bcauction.domain.exception.DomainException;
-import com.bcauction.domain.repository.IWalletRepository;
-import com.bcauction.domain.wrapper.AuctionContract;
-import com.bcauction.domain.wrapper.AuctionFactoryContract;
+import java.io.Console;
+import java.io.File;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Optional;
+
+import org.hyperledger.fabric.sdk.BlockInfo.TransactionEnvelopeInfo.TransactionActionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
-import org.web3j.tuples.generated.Tuple7;
+import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tx.RawTransactionManager;
+import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
 
-import java.math.BigInteger;
-import java.util.List;
+import com.bcauction.application.IAuctionContractService;
+import com.bcauction.domain.Auction;
+import com.bcauction.domain.AuctionInfo;
+import com.bcauction.domain.AuctionInfoFactory;
+import com.bcauction.domain.CommonUtil;
+import com.bcauction.domain.repository.IWalletRepository;
+import com.bcauction.domain.wrapper.AuctionContract;
+import com.bcauction.domain.wrapper.AuctionFactoryContract;
 
 /**
  * AuctionContractService
  * 작성, 배포한 AuctionFactory.sol Auction.sol 스마트 컨트랙트를 이용한다.
  */
-@Service
+@Service 
 public class AuctionContractService implements IAuctionContractService {
 	private static final Logger log = LoggerFactory.getLogger(AuctionContractService.class);
 
@@ -42,6 +54,7 @@ public class AuctionContractService implements IAuctionContractService {
 	private String PASSWORD;
 
 	private AuctionFactoryContract auctionFactoryContract;
+	private AuctionContract auctionContract;
 	private ContractGasProvider contractGasProvider = new DefaultGasProvider();
 	private Credentials credentials;
 
@@ -64,10 +77,24 @@ public class AuctionContractService implements IAuctionContractService {
 	 * 2. info의 highestBidder의 정보를 가지고 최고입찰자 회원의 id를 찾아
 	 * 3. AuctionInfo의 인스턴스를 생성하여 반환한다.
 	 * */
+	@SuppressWarnings("deprecation")
 	@Override
 	public AuctionInfo searchAuctionInfo(final String contract_address)
 	{
 		// TODO
+		System.out.println("컨트랙트 어드래스 : "+contract_address);
+		try {
+			credentials = CommonUtil.getCredential(WALLET_RESOURCE, PASSWORD);
+			auctionFactoryContract = AuctionFactoryContract.load(AUCTION_FACTORY_CONTRACT, web3j, credentials, contractGasProvider);
+			auctionContract = AuctionContract.load(contract_address, web3j, credentials, contractGasProvider);
+			BigInteger minValue;
+			minValue = auctionContract.minValue().send();
+			log.info("minValue", minValue);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return null;
 	}
 

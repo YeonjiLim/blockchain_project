@@ -1,5 +1,5 @@
-var explorerBlockDetailView = Vue.component('ExplorerBlockDetailView', {
-    template: `
+var explorerBlockDetailView = Vue.component("ExplorerBlockDetailView", {
+  template: `
     <div>
         <v-nav></v-nav>
         <v-breadcrumb title="Block Explorer" description="블록체인에서 생성된 블록내역을 보여줍니다."></v-breadcrumb>
@@ -55,24 +55,24 @@ var explorerBlockDetailView = Vue.component('ExplorerBlockDetailView', {
         </div>
     </div>
     `,
-    data() {
-        return {
-            isValid: true,
-            block: {
-                number: 0
-            }
-        }
-    },
-    mounted: function(){
-        // TODO 
-        var blockNumber; // 조회할 블록 번호를 초기화 합니다. 
+  data() {
+    return {
+      isValid: true,
+      block: {
+        number: 0
+      }
+    };
+  },
+  mounted: function() {
+    // TODO
+    var blockNumber; // 조회할 블록 번호를 초기화 합니다.
 
-        if(blockNumber) {
-            /**
-             * 블록 번호로 블록 정보를 가져옵니다. 
-             */  
-        } else {
-            this.isValid = false;
-        }
+    if (blockNumber) {
+      /**
+       * 블록 번호로 블록 정보를 가져옵니다.
+       */
+    } else {
+      this.isValid = false;
     }
-})
+  }
+});

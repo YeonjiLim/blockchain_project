@@ -1,5 +1,5 @@
-Vue.component('v-mypage-nav', {
-    template: `
+Vue.component("v-mypage-nav", {
+  template: `
         <div class="row sub-nav">
             <div class="col-md-6">
                 <nav class="nav nav-pills nav-fill">
@@ -12,13 +12,13 @@ Vue.component('v-mypage-nav', {
             </div>
         </div>
     `,
-    data() {
-        return {
-            sharedState: store.state,
-            viewName: ""
-        }
-    },
-    mounted: function(){
-        this.viewName = this.$route.name;
-    }
+  data() {
+    return {
+      sharedState: store.state,
+      viewName: ""
+    };
+  },
+  mounted: function() {
+    this.viewName = this.$route.name;
+  }
 });

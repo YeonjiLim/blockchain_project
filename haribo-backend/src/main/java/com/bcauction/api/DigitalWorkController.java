@@ -1,3 +1,4 @@
+
 package com.bcauction.api;
 
 
@@ -52,17 +53,18 @@ public class DigitalWorkController
 
 	@RequestMapping(value = "/works/{id}", method = RequestMethod.GET)
 	public DigitalWork search(@PathVariable int id) {
-		DigitalWork 작품 = digitalWorkService.search(id);
-		if (작품 == null) {
+		DigitalWork item = digitalWorkService.search(id);
+		if (item == null) {
 			logger.error("NOT FOUND ID: ", id);
 			throw new NotFoundException(id + " 작품 정보를 찾을 수 없습니다.");
 		}
 
-		return 작품;
+		return item;
 	}
 
 	@RequestMapping(value = "/works", method = RequestMethod.PUT)
 	public DigitalWork update(@RequestBody DigitalWork work) {
+		System.out.println(work+"확인");
 		DigitalWork updated_item = digitalWorkService.updateItemInfo(work);
 		if (updated_item == null) {
 			logger.error("NOT FOUND WORK ID: ", work.getId());
@@ -87,9 +89,10 @@ public class DigitalWorkController
 	 * @param id
 	 * @return
 	 */
+	@RequestMapping(value = "/works/owner/{id}", method = RequestMethod.GET)
 	public List<DigitalWork> memberItemCheckList(@PathVariable int id){
 		List<DigitalWork> list = digitalWorkService.memberItemCheckList(id);
-
+		//System.out.println("AAA"+list);
 		if (list == null || list.isEmpty() )
 			throw new EmptyListException("사용자 소유의 작품이 없습니다.");
 

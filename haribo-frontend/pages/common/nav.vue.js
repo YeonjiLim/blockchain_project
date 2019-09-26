@@ -1,6 +1,6 @@
 var navVue = Vue.component("v-nav", {
-    props: ["isSigned"],
-    template: `
+  props: ["isSigned"],
+  template: `
         <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
             <div class="container">
                 <router-link class="navbar-brand" to="/">Auction | HARIBO</router-link>
@@ -33,15 +33,15 @@ var navVue = Vue.component("v-nav", {
             </div>
         </nav>
     `,
-    data() {
-        return {
-            sharedState: store.state
-        }
-    },
-    methods:{
-        logout:function(){
-            store.state.isSigned = false;
-            alert("로그아웃 성공");
-        }
+  data() {
+    return {
+      sharedState: store.state
+    };
+  },
+  methods: {
+    logout: function() {
+      store.state.isSigned = false;
+      alert("로그아웃 성공");
     }
-})
+  }
+});
