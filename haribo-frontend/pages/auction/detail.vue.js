@@ -116,25 +116,6 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
         ""
       );
 
-<<<<<<< HEAD
-      // register.vue.js, bid.vue.js를 참조하여 완성해 봅니다.
-    }
-  },
-  mounted: async function() {
-    var auctionId = this.$route.params.id;
-    var scope = this;
-    var web3 = createWeb3();
-
-    // 경매 정보 조회
-    auctionService.findById(auctionId, function(auction) {
-      var amount = Number(auction["최소금액"])
-        .toLocaleString()
-        .split(",")
-        .join("");
-      auction["최소금액"] = web3.utils.fromWei(amount, "ether");
-
-      var workId = auction["작품id"];
-=======
         // 경매 정보 조회
         auctionService.findById(auctionId, function(auction){
             var amount = Number(auction['lowest_price']).toLocaleString().split(",").join("")
@@ -142,16 +123,10 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
             console.log(auction);
             var workId = auction['auction_item_id'];
 
-            // 작품 정보 조회
-            workService.findById(workId, function(work){
-                scope.work = work;
-                var creatorId = work['member_id'];
->>>>>>> develop
-
-      // 작품 정보 조회
-      workService.findById(workId, function(work) {
-        scope.work = work;
-        var creatorId = work["회원id"];
+        // 작품 정보 조회
+        workService.findById(workId, function(work){
+            scope.work = work;
+            var creatorId = work['member_id'];
 
         // 생성자 정보 조회
         userService.findById(creatorId, function(user) {
