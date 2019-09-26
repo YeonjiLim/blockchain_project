@@ -118,9 +118,10 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
   
         // 경매 정보 조회
         auctionService.findById(auctionId, function (auction) {
+            console.log(auction)
           var amount = Number(auction['lowest_price']).toLocaleString().split(",").join("")
           auction['lowest_price'] = web3.utils.fromWei(amount, 'ether');
-          console.log(auction);
+        //   console.log(auction);
           var workId = auction['auction_item_id'];
   
           // 작품 정보 조회

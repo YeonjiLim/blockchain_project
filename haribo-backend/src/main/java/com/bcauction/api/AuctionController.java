@@ -68,6 +68,7 @@ public class AuctionController
 		}
 		auction_info.setStart_date(auction.getStart_date());
 		auction_info.setEnd_date(auction.getEnd_date());
+		System.out.println(auction_info);
 
 		return auction_info;
 	}

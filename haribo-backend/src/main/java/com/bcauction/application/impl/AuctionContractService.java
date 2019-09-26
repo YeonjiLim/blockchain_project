@@ -19,6 +19,7 @@ import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.RemoteCall;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
+import org.web3j.tuples.generated.Tuple7;
 import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
@@ -32,6 +33,7 @@ import com.bcauction.domain.CommonUtil;
 import com.bcauction.domain.repository.IWalletRepository;
 import com.bcauction.domain.wrapper.AuctionContract;
 import com.bcauction.domain.wrapper.AuctionFactoryContract;
+import com.bcauction.infrastructure.repository.WalletRepository;
 
 /**
  * AuctionContractService
@@ -77,7 +79,6 @@ public class AuctionContractService implements IAuctionContractService {
 	 * 2. info의 highestBidder의 정보를 가지고 최고입찰자 회원의 id를 찾아
 	 * 3. AuctionInfo의 인스턴스를 생성하여 반환한다.
 	 * */
-	@SuppressWarnings("deprecation")
 	@Override
 	public AuctionInfo searchAuctionInfo(final String contract_address)
 	{
@@ -85,11 +86,19 @@ public class AuctionContractService implements IAuctionContractService {
 		System.out.println("컨트랙트 어드래스 : "+contract_address);
 		try {
 			credentials = CommonUtil.getCredential(WALLET_RESOURCE, PASSWORD);
-			auctionFactoryContract = AuctionFactoryContract.load(AUCTION_FACTORY_CONTRACT, web3j, credentials, contractGasProvider);
 			auctionContract = AuctionContract.load(contract_address, web3j, credentials, contractGasProvider);
-			BigInteger minValue;
-			minValue = auctionContract.minValue().send();
-			log.info("minValue", minValue);
+			Tuple7 t7 = auctionContract.getAuctionInfo().send();
+			log.info("t7", t7.toString());
+			String wallet_owner = auctionContract.highestBidder().send();
+			if(wallet_owner.equals("0x0000000000000000000000000000000000000000")) {
+				System.out.println("입찰자가 없는걸?");
+				wallet_owner ="0";
+			}else {
+				wallet_owner = String.valueOf(walletRepository.search(wallet_owner).getId());
+			}
+//			System.out.println(Long.parseLong(wallet_owner));
+			AuctionInfo auctioninfo = AuctionInfoFactory.creation(contract_address, Long.parseLong(wallet_owner) , t7);
+			return auctioninfo;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
