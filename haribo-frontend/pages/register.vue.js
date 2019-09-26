@@ -1,5 +1,5 @@
-var registerView = Vue.component('RegisterView', {
-    template: `
+var registerView = Vue.component("RegisterView", {
+  template: `
         <div class="container">
             <div class="row">
                 <div id="register-form" class="col-md-6 mx-auto bg-white">
@@ -27,33 +27,33 @@ var registerView = Vue.component('RegisterView', {
             </div>
         </div>
     `,
-    data() {
-        return {
-            user: {
-                email: '',
-                name: '',
-                password: '',
-                passwordConfirm: ''
-            }
-        }
-    },
-    methods: {
-        register: function() {
-            var scope = this;
+  data() {
+    return {
+      user: {
+        email: "",
+        name: "",
+        password: "",
+        passwordConfirm: ""
+      }
+    };
+  },
+  methods: {
+    register: function() {
+      var scope = this;
 
-            if(this.user.password === this.user.passwordConfirm) {
-                userService.signUp(
-                    this.user.email,
-                    this.user.name,
-                    this.user.password,
-                    function(response){
-                        alert("회원가입이 완료되었습니다.");
-                        scope.$router.push('/');
-                    }
-                );
-            } else {
-                alert('비밀번호가 일치하지 않습니다.');
-            }
-        }
+      if (this.user.password === this.user.passwordConfirm) {
+        userService.signUp(
+          this.user.email,
+          this.user.name,
+          this.user.password,
+          function(response) {
+            alert("회원가입이 완료되었습니다.");
+            scope.$router.push("/");
+          }
+        );
+      } else {
+        alert("비밀번호가 일치하지 않습니다.");
+      }
     }
-})
+  }
+});

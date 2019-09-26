@@ -2,8 +2,8 @@
  * 화면: 경매 등록하기
  */
 
-var auctionRegisterView = Vue.component('AuctionRegisterView', {
-    template: `
+var auctionRegisterView = Vue.component("AuctionRegisterView", {
+  template: `
         <div>
             <v-nav></v-nav>
             <v-breadcrumb title="경매 등록하기" description="새로운 경매를 등록합니다."></v-breadcrumb>
@@ -82,87 +82,100 @@ var auctionRegisterView = Vue.component('AuctionRegisterView', {
             </div>
         </div>
     `,
-    data(){
-        return {
-            isCreatingContract:false,
-            registered: false,
-            sharedStates: store.state,
+  data() {
+    return {
+      isCreatingContract: false,
+      registered: false,
+      sharedStates: store.state,
 
-            // 경매 등록전 입력값
-            before: {
-                works: [],
-                selectedWork: null,
-                input: {
+      // 경매 등록전 입력값
+      before: {
+        works: [],
+        selectedWork: null,
+        input: {}
+      },
 
-                }
-            },
-
-            // 경매 등록 후 등록 결과 완료 표시 용도
-            after: {
-                result: {},
-                work: {}
-            }
-        }
+      // 경매 등록 후 등록 결과 완료 표시 용도
+      after: {
+        result: {},
+        work: {}
+      }
+    };
+  },
+  methods: {
+    goBack: function() {
+      this.$router.go(-1);
     },
-    methods: {
-        goBack: function(){
-            this.$router.go(-1);
-        },
-        register: function(){
-           /**
-             * 컨트랙트를 호출하여 경매를 생성하고
-             * 경매 정보 등록 API를 호출합니다. 
-             */
-            
-            var scope = this;
-            this.isCreatingContract = true;
+    register: function() {
+      /**
+       * 컨트랙트를 호출하여 경매를 생성하고
+       * 경매 정보 등록 API를 호출합니다.
+       */
 
-            // 1. 내 지갑 주소를 가져옵니다.
-            walletService.findAddressById(this.sharedStates.user.id, function(walletAddress){
-                
-                // 2. 경매 컨트랙트를 블록체인에 생성합니다.
-                // components/auctionFactory.js의 createAuction 함수를 호출합니다.
-                // TODO createAuction 함수의 내용을 완성합니다. 
-                createAuction({
-                    workId: scope.before.selectedWork,
-                    minValue: scope.before.input.minPrice,
-                    startTime: new Date(scope.before.input.startDate).getTime(),
-                    endTime: new Date(scope.before.input.untilDate).getTime()
-                }, walletAddress, scope.before.input.privateKey, function(log){
-                    console.log(log);
-                    var contractAddress = log[0];
-                    var data = {
-                        "auction_creater_id": scope.sharedStates.user.id,
-                        "auction_item_id": scope.before.selectedWork,
-                        "start_date": new Date(scope.before.input.startDate),
-                        "end_date": new Date(scope.before.input.untilDate),
-                        "lowest_price": Number(scope.before.input.minPrice),
-                        "contract_address": contractAddress,
-                    }
-                    console.log(data)
-                    // 3. 선택한 작업 정보를 가져옵니다.
-                    workService.findById(scope.before.selectedWork, function(result){
-                        scope.after.work = result;
-                    });
-                    
-                    // 4. 생성한 경매를 등록 요청 합니다.
-                    auctionService.register(data, function(result){
-                        alert("경매가 등록되었습니다.");
-                        scope.registered = true;
-                        scope.after.result = data;
-                    });
-
-                    this.isCreatingContract = false;
-                }); 
+      // 1. 내 지갑 주소를 가져옵니다.
+      walletService.findAddressById(this.sharedStates.user.id, function(
+        walletAddress
+      ) {
+        // 2. 경매 컨트랙트를 블록체인에 생성합니다.
+        // components/auctionFactory.js의 createAuction 함수를 호출합니다.
+        // TODO createAuction 함수의 내용을 완성합니다.
+        createAuction(
+          {
+            workId: scope.before.selectedWork,
+            minValue: scope.before.input.minPrice,
+            startTime: new Date(scope.before.input.startDate).getTime(),
+            endTime: new Date(scope.before.input.untilDate).getTime()
+          },
+          walletAddress,
+          scope.before.input.privateKey,
+          function(log) {
+            console.log(log);
+            var contractAddress = log[0];
+            var data = {
+              auction_creater_id: scope.sharedStates.user.id,
+              auction_item_id: scope.before.selectedWork,
+              start_date: new Date(scope.before.input.startDate),
+              end_date: new Date(scope.before.input.untilDate),
+              lowest_price: Number(scope.before.input.minPrice),
+              contract_address: contractAddress
+            };
+            console.log(data);
+            // 3. 선택한 작업 정보를 가져옵니다.
+            workService.findById(scope.before.selectedWork, function(result) {
+              scope.after.work = result;
             });
-        }
-    },
-    mounted: function(){
-        var scope = this;
 
-        // 내 작품 목록 가져오기
-        workService.findWorksByOwner(this.sharedStates.user.id, function(result){
-            scope.before.works = result;
-        });
+            // 4. 생성한 경매를 등록 요청 합니다.
+            auctionService.register(data, function(result) {
+              alert("경매가 등록되었습니다.");
+              scope.registered = true;
+              scope.after.result = data;
+            });
+
+            // 3. 선택한 작업 정보를 가져옵니다.
+            workService.findById(scope.before.selectedWork, function(result) {
+              scope.after.work = result;
+            });
+
+            // 4. 생성한 경매를 등록 요청 합니다.
+            auctionService.register(data, function(result) {
+              alert("경매가 등록되었습니다.");
+              scope.registered = true;
+              scope.after.result = data;
+            });
+
+            this.isCreatingContract = false;
+          }
+        );
+      });
     }
-})
+  },
+  mounted: function() {
+    var scope = this;
+
+    // 내 작품 목록 가져오기
+    workService.findWorksByOwner(this.sharedStates.user.id, function(result) {
+      scope.before.works = result;
+    });
+  }
+});

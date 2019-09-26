@@ -2,8 +2,8 @@
  * 화면 명 : 개인정보 수정
  */
 
-var myChangePasswordView = Vue.component('MyChangePasswordView', {
-    template: `
+var myChangePasswordView = Vue.component("MyChangePasswordView", {
+  template: `
         <div>
             <v-nav></v-nav>
             <v-breadcrumb title="비밀번호 변경" description="비밀번호를 변경 할 수 있습니다."></v-breadcrumb>
@@ -41,63 +41,66 @@ var myChangePasswordView = Vue.component('MyChangePasswordView', {
             </div>
         </div>
     `,
-    data(){
-        return {
-            user: {
-                id: 0,
-                email: "",
-                name: "",
-                password: ""
-            },
-            input: {
-                oldPassword: "",
-                newPassword: "",
-                newPasswordConfirm: ""
-            },
-            sharedStates: store.state
-        }
-    },
-    methods: {
-        update: function(){
-            // 비밀번호가 회원의 비밀번호와 일치하는지 비교한다.
-            if(this.user.password !== this.input.oldPassword){
-                alert("입력하신 비밀번호가 일치하지 않습니다.");
-                return;
-            }
+  data() {
+    return {
+      user: {
+        id: 0,
+        email: "",
+        name: "",
+        password: ""
+      },
+      input: {
+        oldPassword: "",
+        newPassword: "",
+        newPasswordConfirm: ""
+      },
+      sharedStates: store.state
+    };
+  },
+  methods: {
+    update: function() {
+      // 비밀번호가 회원의 비밀번호와 일치하는지 비교한다.
+      if (this.user.password !== this.input.oldPassword) {
+        alert("입력하신 비밀번호가 일치하지 않습니다.");
+        return;
+      }
 
-            // 비밀번호를 공백으로 입력했는지 확인한다.
-            if(this.input.newPassword === "") {
-                alert("신규 비밀번호를 입력해주세요.");
-                return;
-            }
+      // 비밀번호를 공백으로 입력했는지 확인한다.
+      if (this.input.newPassword === "") {
+        alert("신규 비밀번호를 입력해주세요.");
+        return;
+      }
 
-            // 신규비밀번호와 신규비밀번호 확인이 일치하지 않는 경우를 확인한다.
-            if(this.input.newPassword !== this.input.newPasswordConfirm) {
-                alert("신규 비밀번호와 신규 비밀번호 확인이 일치하지 않습니다.");
-                return;
-            }
+      // 신규비밀번호와 신규비밀번호 확인이 일치하지 않는 경우를 확인한다.
+      if (this.input.newPassword !== this.input.newPasswordConfirm) {
+        alert("신규 비밀번호와 신규 비밀번호 확인이 일치하지 않습니다.");
+        return;
+      }
 
-            userService.update({
-                "이메일": this.user.email,
-                "이름": this.user.name, 
-                "비밀번호": this.input.newPassword // 신규 비밀번호
-            }, function(data){
-                alert("비밀번호가 변경되었습니다.");
-                this.$router.go(-1);
-            });
+      userService.update(
+        {
+          이메일: this.user.email,
+          이름: this.user.name,
+          비밀번호: this.input.newPassword // 신규 비밀번호
         },
-        goBack: function(){
-            this.$router.go(-1);
+        function(data) {
+          alert("비밀번호가 변경되었습니다.");
+          this.$router.go(-1);
         }
+      );
     },
-    mounted: function(){
-        var scope = this;
-
-        userService.findById(this.sharedStates.user.id, function(data){
-            scope.user.id = data["id"];
-            scope.user.email = data["이메일"];
-            scope.user.name = data["이름"];
-            scope.user.password = data["비밀번호"];
-        });
+    goBack: function() {
+      this.$router.go(-1);
     }
-})
+  },
+  mounted: function() {
+    var scope = this;
+
+    userService.findById(this.sharedStates.user.id, function(data) {
+      scope.user.id = data["id"];
+      scope.user.email = data["이메일"];
+      scope.user.name = data["이름"];
+      scope.user.password = data["비밀번호"];
+    });
+  }
+});
