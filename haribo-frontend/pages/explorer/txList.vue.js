@@ -1,5 +1,5 @@
-var explorerTxListView = Vue.component('ExplorerTxListView', {
-    template: `
+var explorerTxListView = Vue.component("ExplorerTxListView", {
+  template: `
         <div>
             <v-nav></v-nav>
             <v-breadcrumb title="Transaction Explorer" description="블록체인에서 생성된 거래내역을 보여줍니다."></v-breadcrumb>
@@ -33,26 +33,26 @@ var explorerTxListView = Vue.component('ExplorerTxListView', {
             </div>
         </div>
     `,
-    data(){
-        return {
-            transactions: [],
-            block: {}
-        };
-    },
-    methods: {
-        fetchTxes: function(){
-            /**
-             * TODO 최근 블록에 포함된 트랜잭션 리스트를 반환합니다. 
-             */
-        }      
-    },
-    mounted: function(){
-        this.fetchTxes();
-
-        this.$nextTick(function () {
-            window.setInterval(() => {
-                this.fetchTxes();
-            }, REFRESH_TIMES_OF_TRANSACTIONS);
-        })
+  data() {
+    return {
+      transactions: [],
+      block: {}
+    };
+  },
+  methods: {
+    fetchTxes: function() {
+      /**
+       * TODO 최근 블록에 포함된 트랜잭션 리스트를 반환합니다.
+       */
     }
-})
+  },
+  mounted: function() {
+    this.fetchTxes();
+
+    this.$nextTick(function() {
+      window.setInterval(() => {
+        this.fetchTxes();
+      }, REFRESH_TIMES_OF_TRANSACTIONS);
+    });
+  }
+});

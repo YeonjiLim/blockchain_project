@@ -1,5 +1,5 @@
-var auctionView = Vue.component('AuctionView', {
-    template: `
+var auctionView = Vue.component("AuctionView", {
+  template: `
         <div>
             <v-nav></v-nav>
             <v-breadcrumb title="경매 참여하기" description="경매 중인 작품을 보여줍니다."></v-breadcrumb>
@@ -24,37 +24,55 @@ var auctionView = Vue.component('AuctionView', {
             </div>
         </div>
     `,
-    data() {
-        return {
-            auctions: []
+  data() {
+    return {
+      auctions: []
+    };
+  },
+  methods: {
+    calculateDate(date) {
+      var now = new Date();
+      var endDate = new Date(date);
+      var diff = endDate.getTime() - now.getTime();
+
+      // 만약 종료일자가 지났다면 "경매 마감"을 표시한다.
+      if (diff < 0) {
+        return "경매 마감";
+      } else {
+        // UNIX Timestamp를 자바스크립트 Date객체로 변환한다.
+        var d = new Date(diff);
+        var days = d.getDate();
+        var hours = d.getHours();
+        var minutes = d.getMinutes();
+
+        return "남은시간: " + days + "일 " + hours + "시간 " + minutes + "분";
+      }
+    }
+  },
+  mounted: function() {
+    var scope = this;
+
+    auctionService.findAll(function(data) {
+      var result = data;
+
+<<<<<<< HEAD
+      // 각 경매별 작품 정보를 불러온다.
+      function fetchData(start, end) {
+        if (start == end) {
+          scope.auctions = result;
+        } else {
+          var id = result[start]["경매작품id"];
+          workService.findById(id, function(work) {
+            result[start]["작품정보"] = work;
+            fetchData(start + 1, end);
+          });
         }
-    },
-    methods: {
-        calculateDate(date) {
-            var now = new Date();
-            var endDate = new Date(date);
-            var diff = endDate.getTime() - now.getTime();
-
-            // 만약 종료일자가 지났다면 "경매 마감"을 표시한다.
-            if(diff < 0) {
-                return "경매 마감";
-            } else {
-                // UNIX Timestamp를 자바스크립트 Date객체로 변환한다.
-                var d = new Date(diff);
-                var days = d.getDate();
-                var hours = d.getHours();
-                var minutes = d.getMinutes();
-
-                return "남은시간: " + days + "일 " + hours + "시간 " + minutes + "분";
-            }
-        }
-    },
-    mounted: function(){
-        var scope = this;
-
-        auctionService.findAll(function(data){
-            var result = data;
-
+      }
+      fetchData(0, result.length);
+    });
+  }
+});
+=======
             // 각 경매별 작품 정보를 불러온다.
             function fetchData(start, end){
                 if(start == end) {
@@ -72,3 +90,4 @@ var auctionView = Vue.component('AuctionView', {
         });
     }
 });
+>>>>>>> develop

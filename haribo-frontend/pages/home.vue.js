@@ -1,5 +1,5 @@
 var homeView = Vue.component("Home", {
-    template: `
+  template: `
         <div>
             <v-nav></v-nav>
             <div id="main-overview" class="container">
@@ -13,4 +13,4 @@ var homeView = Vue.component("Home", {
             </div>
         </div>
     `
-})
+});
