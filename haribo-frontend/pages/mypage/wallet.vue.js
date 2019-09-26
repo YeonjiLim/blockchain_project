@@ -50,26 +50,26 @@ var walletCreateView = Vue.component("WalletCreateView", {
       sharedState: store.state
     };
   },
-    methods: {
-        // TODO web3 API를 이용하여 내 지갑을 생성합니다.
-        createWallet: function(){
-            alert("지갑 생성하는 기능을 완성합니다!!");
-            var account = web3.eth.accounts.create();
-            console.log(account);
-            var wallet = web3.eth.accounts.wallet.add(account);
-            console.log(wallet);
-            this.privateKey = wallet.privateKey;
-            this.walletAddress = wallet.address;
-            this.step=1;
-        },
-        saveWallet: function(){
-            var scope = this;
+  methods: {
+    // TODO web3 API를 이용하여 내 지갑을 생성합니다.
+    createWallet: function() {
+      alert("지갑 생성하는 기능을 완성합니다!!");
+      var account = web3.eth.accounts.create();
+      console.log(account);
+      var wallet = web3.eth.accounts.wallet.add(account);
+      console.log(wallet);
+      this.privateKey = wallet.privateKey;
+      this.walletAddress = wallet.address;
+      this.step = 1;
+    },
+    saveWallet: function() {
+      var scope = this;
 
-            walletService.registerWallet(
-                scope.sharedState.user.id,
-                this.walletAddress,
-                function(response){
-                    alert("지갑 주소가 등록되었습니다.");
+      walletService.registerWallet(
+        scope.sharedState.user.id,
+        this.walletAddress,
+        function(response) {
+          alert("지갑 주소가 등록되었습니다.");
 
           scope.sharedState.user.hasWallet = true;
           scope.$router.push("/mypage/wallet_info");

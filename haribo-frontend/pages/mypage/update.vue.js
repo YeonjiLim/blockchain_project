@@ -2,8 +2,8 @@
  * 화면 명 : 개인정보 수정
  */
 
-var myUpdateView = Vue.component('MyUpdateView', {
-    template: `
+var myUpdateView = Vue.component("MyUpdateView", {
+  template: `
         <div>
             <v-nav></v-nav>
             <v-breadcrumb title="개인정보수정" description="개인정보를 수정할 수 있습니다."></v-breadcrumb>
@@ -37,56 +37,59 @@ var myUpdateView = Vue.component('MyUpdateView', {
             </div>
         </div>
     `,
-    data(){
-        return {
-            user: {
-                id: 0,
-                email: "",
-                name: "",
-                password: ""
-            },
-            input: {
-                name: "",
-                password: ""
-            },
-            sharedStates: store.state
-        }
-    },
-    methods: {
-        update: function(){
-            // 비밀번호가 회원의 비밀번호와 일치하는지 비교한다.
-            if(this.user.password !== this.input.password){
-                alert("입력하신 비밀번호가 일치하지 않습니다.");
-                return;
-            }
+  data() {
+    return {
+      user: {
+        id: 0,
+        email: "",
+        name: "",
+        password: ""
+      },
+      input: {
+        name: "",
+        password: ""
+      },
+      sharedStates: store.state
+    };
+  },
+  methods: {
+    update: function() {
+      // 비밀번호가 회원의 비밀번호와 일치하는지 비교한다.
+      if (this.user.password !== this.input.password) {
+        alert("입력하신 비밀번호가 일치하지 않습니다.");
+        return;
+      }
 
-            // 이름을 공백으로 입력했는지 확인한다.
-            if(this.input.name === "") {
-                alert("이름을 입력해주세요.");
-                return;
-            }
+      // 이름을 공백으로 입력했는지 확인한다.
+      if (this.input.name === "") {
+        alert("이름을 입력해주세요.");
+        return;
+      }
 
-            userService.update({
-                "이메일": this.user.email,
-                "이름": this.input.name, // 신규 이름
-                "비밀번호": this.user.password
-            }, function(data){
-                alert("이름이 변경되었습니다.");
-                this.$router.go(-1);
-            });
+      userService.update(
+        {
+          이메일: this.user.email,
+          이름: this.input.name, // 신규 이름
+          비밀번호: this.user.password
         },
-        goBack: function(){
-            this.$router.go(-1);
+        function(data) {
+          alert("이름이 변경되었습니다.");
+          this.$router.go(-1);
         }
+      );
     },
-    mounted: function(){
-        var scope = this;
-        
-        userService.findById(this.sharedStates.user.id, function(data){
-            scope.user.id = data["id"];
-            scope.user.email = data["이메일"];
-            scope.user.name = data["이름"];
-            scope.user.password = data["비밀번호"];
-        });
+    goBack: function() {
+      this.$router.go(-1);
     }
-})
+  },
+  mounted: function() {
+    var scope = this;
+
+    userService.findById(this.sharedStates.user.id, function(data) {
+      scope.user.id = data["id"];
+      scope.user.email = data["이메일"];
+      scope.user.name = data["이름"];
+      scope.user.password = data["비밀번호"];
+    });
+  }
+});
