@@ -554,7 +554,15 @@ function createAuction(options, walletAddress, privateKey, onConfirm) {
  * TODO [입찰]
  * 해당 컨트랙트 주소의 bid함수를 호출하여 입찰합니다.
  * 경매 컨트랙트 주소: options.contractAddress
+<<<<<<< HEAD
+ *  */ 
+function auction_bid(options, onConfirm){
+    var web3 = createWeb3();
+    var contract=createAuctionContract(web3,options.contractAddress);
+    
+=======
  *  */
+>>>>>>> develop
 
 function auction_bid(options, onConfirm) {
   options.contractAddress;
