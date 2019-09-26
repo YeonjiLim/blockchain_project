@@ -55,15 +55,15 @@ var auctionView = Vue.component("AuctionView", {
     auctionService.findAll(function(data) {
       var result = data;
 
-<<<<<<< HEAD
       // 각 경매별 작품 정보를 불러온다.
       function fetchData(start, end) {
         if (start == end) {
           scope.auctions = result;
+          console.log(scope.auctions);
         } else {
-          var id = result[start]["경매작품id"];
+          var id = result[start]["auction_item_id"];
           workService.findById(id, function(work) {
-            result[start]["작품정보"] = work;
+            result[start]["explanation"] = work;
             fetchData(start + 1, end);
           });
         }
@@ -72,22 +72,3 @@ var auctionView = Vue.component("AuctionView", {
     });
   }
 });
-=======
-            // 각 경매별 작품 정보를 불러온다.
-            function fetchData(start, end){
-                if(start == end) {
-                    scope.auctions = result;
-                    console.log(scope.auctions);
-                } else {
-                    var id = result[start]['auction_item_id'];
-                    workService.findById(id, function(work){
-                        result[start]['explanation'] = work;
-                        fetchData(start+1, end);
-                    });
-                }
-            }
-            fetchData(0, result.length);
-        });
-    }
-});
->>>>>>> develop

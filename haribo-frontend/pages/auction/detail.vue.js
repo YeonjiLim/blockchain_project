@@ -116,39 +116,43 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
         ""
       );
 
-        // 경매 정보 조회
-        auctionService.findById(auctionId, function(auction){
-            var amount = Number(auction['lowest_price']).toLocaleString().split(",").join("")
-            auction['lowest_price'] = web3.utils.fromWei(amount, 'ether');
-            console.log(auction);
-            var workId = auction['auction_item_id'];
-
-        // 작품 정보 조회
-        workService.findById(workId, function(work){
-            scope.work = work;
-            var creatorId = work['member_id'];
-
-        // 생성자 정보 조회
-        userService.findById(creatorId, function(user) {
-          scope.creator = user;
-        });
-      });
-
-      // 입찰자 조회
-      if (auction["최고입찰액"] > 0) {
-        var amount = Number(auction["최고입찰액"])
+      // 경매 정보 조회
+      auctionService.findById(auctionId, function(auction) {
+        var amount = Number(auction["lowest_price"])
           .toLocaleString()
           .split(",")
           .join("");
-        auction["최고입찰액"] = web3.utils.fromWei(amount, "ether");
-        var bidderId = auction["최고입찰자id"];
+        auction["lowest_price"] = web3.utils.fromWei(amount, "ether");
+        console.log(auction);
+        var workId = auction["auction_item_id"];
 
-        userService.findById(bidderId, function(user) {
-          scope.bidder = user;
+        // 작품 정보 조회
+        workService.findById(workId, function(work) {
+          scope.work = work;
+          var creatorId = work["member_id"];
+
+          // 생성자 정보 조회
+          userService.findById(creatorId, function(user) {
+            scope.creator = user;
+          });
         });
-      }
 
-      scope.auction = auction;
-    });
+        // 입찰자 조회
+        if (auction["최고입찰액"] > 0) {
+          var amount = Number(auction["최고입찰액"])
+            .toLocaleString()
+            .split(",")
+            .join("");
+          auction["최고입찰액"] = web3.utils.fromWei(amount, "ether");
+          var bidderId = auction["최고입찰자id"];
+
+          userService.findById(bidderId, function(user) {
+            scope.bidder = user;
+          });
+        }
+
+        scope.auction = auction;
+      });
+    }
   }
 });
