@@ -1,5 +1,5 @@
 var worksDetailView = Vue.component("WorkDetailView", {
-    template: `
+  template: `
         <div>
             <v-nav></v-nav>
             <v-breadcrumb title="작품 이력 보기" description="등록된 작품의 이력을 볼 수 있습니다."></v-breadcrumb>
@@ -67,67 +67,67 @@ var worksDetailView = Vue.component("WorkDetailView", {
             </div>
         </div>
     `,
-    data(){
-        return {
-            work: {
-                id: 0,
-                name: "",
-                description: "",
-                isActive: "",
-                status: "",
-                ownerId: 0
-            },
-            user: {
-                id: 0,
-                name: "",
-                email: ""
-            },
-            history: [],
-            sharedStates: store.state
-        }
+  data() {
+    return {
+      work: {
+        id: 0,
+        name: "",
+        description: "",
+        isActive: "",
+        status: "",
+        ownerId: 0
+      },
+      user: {
+        id: 0,
+        name: "",
+        email: ""
+      },
+      history: [],
+      sharedStates: store.state
+    };
+  },
+  methods: {
+    goBack: function() {
+      // 이전 페이지로 이동한다.
+      this.$router.go(-1);
     },
-    methods: {
-        goBack: function(){
-            // 이전 페이지로 이동한다.
-            this.$router.go(-1);
+    deleteWork: function() {
+      var scope = this;
+      workService.delete(
+        this.$route.params.id,
+        function(response) {
+          alert("작품이 삭제되었습니다.");
+          scope.$router.push("/artworks");
         },
-        deleteWork: function(){
-            var scope = this;
-            workService.delete(
-                this.$route.params.id, 
-                function(response){
-                    alert("작품이 삭제되었습니다.");
-                    scope.$router.push('/artworks');
-                },
-                function(error){
-                    alert("작품을 삭제할 수 없습니다.");
-                }
-            );
+        function(error) {
+          alert("작품을 삭제할 수 없습니다.");
         }
-    },
-    mounted: function(){
-        var scope = this;
-        var workId = this.$route.params.id;
-
-        // 작품 상세 정보 조회
-        workService.findById(workId, function(data){
-            scope.work.id = workId;
-            scope.work.name = data["name"];
-            scope.work.description = data["explanation"];
-            scope.work.isActive = data["disclosure"];
-            scope.work.status = data["status"];
-            scope.work.ownerId = data["member_id"];
-
-            userService.findById(scope.work.ownerId, function(user){
-                scope.user.id = user["id"];
-                scope.user.name = user["name"];
-                scope.user.email = user["email"];
-            });
-        });
-
-        // 작품 이력 조회
-        workService.findHistoryById(workId, function(data){
-            scope.history = data;
-        });
+      );
     }
-})
+  },
+  mounted: function() {
+    var scope = this;
+    var workId = this.$route.params.id;
+
+    // 작품 상세 정보 조회
+    workService.findById(workId, function(data) {
+      scope.work.id = workId;
+      scope.work.name = data["name"];
+      scope.work.description = data["explanation"];
+      scope.work.isActive = data["disclosure"];
+      scope.work.status = data["status"];
+      scope.work.ownerId = data["member_id"];
+
+      userService.findById(scope.work.ownerId, function(user) {
+        scope.user.id = user["id"];
+        scope.user.name = user["name"];
+        scope.user.email = user["email"];
+      });
+    });
+
+    // 작품 이력 조회
+    workService.findHistoryById(workId, function(data) {
+      scope.history = data;
+    });
+  }
+});

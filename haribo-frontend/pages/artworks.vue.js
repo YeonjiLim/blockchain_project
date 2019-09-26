@@ -1,5 +1,5 @@
-var artworksView = Vue.component('artworksView', {
-    template: `
+var artworksView = Vue.component("artworksView", {
+  template: `
         <div>
             <v-nav></v-nav>
             <v-breadcrumb title="Artworks" description="작품을 둘러볼 수 있습니다."></v-breadcrumb>
@@ -45,21 +45,21 @@ var artworksView = Vue.component('artworksView', {
             </div>
         </div>
     `,
-    data() {
-        return {
-            artworks: [{
-                "name": "",
-                "explanation": ""
-            }]
+  data() {
+    return {
+      artworks: [
+        {
+          name: "",
+          explanation: ""
         }
-    },
-    mounted: function(){
-        var scope = this;
+      ]
+    };
+  },
+  mounted: function() {
+    var scope = this;
 
-        workService.findAll(function(data){
-            console.log(data);
-            
-            scope.artworks = data;
-        });
-    }
-})
+    workService.findAll(function(data) {
+      scope.artworks = data;
+    });
+  }
+});

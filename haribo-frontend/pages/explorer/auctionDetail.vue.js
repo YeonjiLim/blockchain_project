@@ -1,5 +1,5 @@
-var explorerAuctionDetailView = Vue.component('ExplorerDetailView', {
-    template: `
+var explorerAuctionDetailView = Vue.component("ExplorerDetailView", {
+  template: `
     <div>
         <v-nav></v-nav>
         <v-breadcrumb title="Auction Explorer" description="블록체인에 기록된 경매내역을 보여줍니다."></v-breadcrumb>
@@ -58,18 +58,19 @@ var explorerAuctionDetailView = Vue.component('ExplorerDetailView', {
         </div>
     </div>
     `,
-    data(){
-        return {
-            contractAddress: "",
-            contract: null,
-            work: {
-                id: 0
-            }
-        }
-    },
-    mounted: async function(){
-        /**
-         * TODO 경매 컨트랙트로부터 경매 정보를 가져옵니다. 
-         */
-    }
-})
+  data() {
+    return {
+      contractAddress: "",
+      contract: null,
+      work: {
+        id: 0
+      }
+    };
+  },
+  mounted: async function() {
+    
+    /**
+     * TODO 경매 컨트랙트로부터 경매 정보를 가져옵니다.
+     */
+  }
+});
