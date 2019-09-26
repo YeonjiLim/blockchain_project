@@ -91,6 +91,12 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
       isClosing: false
     };
   },
+  mounted(){
+    var auctionId = this.$route.params.id
+    auctionService.findById(auctionId).then(function(res){
+        
+    })
+  },
   methods: {
     closeAuction: function() {
       /**
@@ -151,4 +157,5 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
       scope.auction = auction;
     });
   }
+}
 });

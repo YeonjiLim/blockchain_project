@@ -68,6 +68,7 @@ var explorerAuctionDetailView = Vue.component("ExplorerDetailView", {
     };
   },
   mounted: async function() {
+    
     /**
      * TODO 경매 컨트랙트로부터 경매 정보를 가져옵니다.
      */
