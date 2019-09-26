@@ -116,6 +116,7 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
         ""
       );
 
+<<<<<<< HEAD
       // register.vue.js, bid.vue.js를 참조하여 완성해 봅니다.
     }
   },
@@ -133,6 +134,19 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
       auction["최소금액"] = web3.utils.fromWei(amount, "ether");
 
       var workId = auction["작품id"];
+=======
+        // 경매 정보 조회
+        auctionService.findById(auctionId, function(auction){
+            var amount = Number(auction['lowest_price']).toLocaleString().split(",").join("")
+            auction['lowest_price'] = web3.utils.fromWei(amount, 'ether');
+            console.log(auction);
+            var workId = auction['auction_item_id'];
+
+            // 작품 정보 조회
+            workService.findById(workId, function(work){
+                scope.work = work;
+                var creatorId = work['member_id'];
+>>>>>>> develop
 
       // 작품 정보 조회
       workService.findById(workId, function(work) {
