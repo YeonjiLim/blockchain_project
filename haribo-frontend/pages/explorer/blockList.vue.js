@@ -1,5 +1,5 @@
-var explorerBlockView = Vue.component('ExplorerBlockView', {
-    template: `
+var explorerBlockView = Vue.component("ExplorerBlockView", {
+  template: `
     <div>
         <v-nav></v-nav>
         <v-breadcrumb title="Block Explorer" description="블록체인에서 생성된 블록내역을 보여줍니다."></v-breadcrumb>
@@ -29,26 +29,26 @@ var explorerBlockView = Vue.component('ExplorerBlockView', {
         </div>
     </div>
     `,
-    data(){
-        return {
-            lastReadBlock: 0,
-            blocks: []
-        }
-    },
-    methods: {
-        fetchBlocks: function(){
-            /**
-             * TODO 최근 10개의 블록 정보를 업데이트 합니다.
-             */
-        }
-    },
-    mounted: function(){
-        this.fetchBlocks();
-
-        this.$nextTick(function () {
-            window.setInterval(() => {
-                this.fetchBlocks();
-            }, REFRESH_TIMES_OF_BLOCKS);
-        })
+  data() {
+    return {
+      lastReadBlock: 0,
+      blocks: []
+    };
+  },
+  methods: {
+    fetchBlocks: function() {
+      /**
+       * TODO 최근 10개의 블록 정보를 업데이트 합니다.
+       */
     }
-})
+  },
+  mounted: function() {
+    this.fetchBlocks();
+
+    this.$nextTick(function() {
+      window.setInterval(() => {
+        this.fetchBlocks();
+      }, REFRESH_TIMES_OF_BLOCKS);
+    });
+  }
+});

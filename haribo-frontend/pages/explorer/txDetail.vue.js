@@ -1,5 +1,5 @@
-var explorerTxDetailView = Vue.component('ExplorerTxDetailView', {
-    template: `
+var explorerTxDetailView = Vue.component("ExplorerTxDetailView", {
+  template: `
         <div>
             <v-nav></v-nav>
             <v-breadcrumb title="Transaction Explorer" description="블록체인에서 생성된 거래내역을 보여줍니다."></v-breadcrumb>
@@ -57,27 +57,27 @@ var explorerTxDetailView = Vue.component('ExplorerTxDetailView', {
             </div>
         </div>
     `,
-    data(){
-        return {
-            isValid: true, 
-            tx: {
-                hash: "-",
-                timestamp: "-"
-            }
-        }
-    },
-    mounted: function(){
-        /**
-         *  TODO 트랜잭션 해시로 트랜잭션 상세 정보를 조회합니다.
-         */
-        var hash; // 조회할 트랜잭션 해시를 초기화합니다. 
+  data() {
+    return {
+      isValid: true,
+      tx: {
+        hash: "-",
+        timestamp: "-"
+      }
+    };
+  },
+  mounted: function() {
+    /**
+     *  TODO 트랜잭션 해시로 트랜잭션 상세 정보를 조회합니다.
+     */
+    var hash; // 조회할 트랜잭션 해시를 초기화합니다.
 
-        if(hash) {
-            /**
-             * 트랜잭션 해시값으로 트랜잭션 정보를 가져옵니다. 
-             */
-        } else {
-            this.isValid = false;
-        }
+    if (hash) {
+      /**
+       * 트랜잭션 해시값으로 트랜잭션 정보를 가져옵니다.
+       */
+    } else {
+      this.isValid = false;
     }
-})
+  }
+});

@@ -1,5 +1,5 @@
-Vue.component('explorer-nav', {
-    template: `
+Vue.component("explorer-nav", {
+  template: `
         <div class="row sub-nav mb-3">
             <div class="col-md-6">
                 <nav class="nav nav-pills nav-fill">
@@ -10,13 +10,13 @@ Vue.component('explorer-nav', {
             </div>
         </div>
     `,
-    data() {
-        return {
-            sharedState: store.state,
-            path: ""
-        }
-    },
-    mounted: function(){
-        this.path = this.$route.path;
-    }
+  data() {
+    return {
+      sharedState: store.state,
+      path: ""
+    };
+  },
+  mounted: function() {
+    this.path = this.$route.path;
+  }
 });
