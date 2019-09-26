@@ -539,7 +539,9 @@ function createAuction(options, walletAddress, privateKey, onConfirm){
  * 경매 컨트랙트 주소: options.contractAddress
  *  */ 
 function auction_bid(options, onConfirm){
-    options.contractAddress
+    var web3 = createWeb3();
+    var contract=createAuctionContract(web3,options.contractAddress);
+    
 
 }
 
