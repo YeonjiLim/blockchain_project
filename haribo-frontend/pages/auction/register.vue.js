@@ -20,7 +20,7 @@ var auctionRegisterView = Vue.component("AuctionRegisterView", {
                                 <div class="form-group">
                                     <label id="work">작품 선택</label>
                                     <select v-model="before.selectedWork" class="form-control">
-                                        <option v-for="work in before.works" :value="work.id">{{ work['이름'] }}</option>
+                                        <option v-for="work in before.works" :value="work.id">{{ work['name'] }}</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -56,11 +56,11 @@ var auctionRegisterView = Vue.component("AuctionRegisterView", {
                                 <table class="table table-bordered mt-5">
                                     <tr>
                                         <th>경매작품</th>
-                                        <td>{{ after.work['이름'] }}</td>
+                                        <td>{{ after.work['name'] }}</td>
                                     </tr>
                                     <tr>
                                         <th>최저가</th>
-                                        <td>{{ after.result['최저가'] }} ETH</td>
+                                        <td>{{ after.result['lowest_price'] }} ETH</td>
                                     </tr>
                                     <tr>
                                         <th>시작일시</th>
@@ -72,7 +72,7 @@ var auctionRegisterView = Vue.component("AuctionRegisterView", {
                                     </tr>
                                     <tr>
                                         <th>컨트랙트 주소</th>
-                                        <td>{{ after.result['컨트랙트주소'] }}</td>
+                                        <td>{{ after.result['contract_address'] }}</td>
                                     </tr>
                                 </table>
                             </div>
@@ -112,9 +112,6 @@ var auctionRegisterView = Vue.component("AuctionRegisterView", {
        * 경매 정보 등록 API를 호출합니다.
        */
 
-      var scope = this;
-      this.isCreatingContract = true;
-
       // 1. 내 지갑 주소를 가져옵니다.
       walletService.findAddressById(this.sharedStates.user.id, function(
         walletAddress
@@ -133,15 +130,27 @@ var auctionRegisterView = Vue.component("AuctionRegisterView", {
           scope.before.input.privateKey,
           function(log) {
             console.log(log);
-            var contractAddress = log.newAuction;
+            var contractAddress = log[0];
             var data = {
-              경매생성자id: scope.sharedStates.user.id,
-              경매작품id: scope.before.selectedWork,
-              시작일시: new Date(scope.before.input.startDate),
-              종료일시: new Date(scope.before.input.untilDate),
-              최저가: Number(scope.before.input.minPrice),
-              컨트랙트주소: contractAddress
+              auction_creater_id: scope.sharedStates.user.id,
+              auction_item_id: scope.before.selectedWork,
+              start_date: new Date(scope.before.input.startDate),
+              end_date: new Date(scope.before.input.untilDate),
+              lowest_price: Number(scope.before.input.minPrice),
+              contract_address: contractAddress
             };
+            console.log(data);
+            // 3. 선택한 작업 정보를 가져옵니다.
+            workService.findById(scope.before.selectedWork, function(result) {
+              scope.after.work = result;
+            });
+
+            // 4. 생성한 경매를 등록 요청 합니다.
+            auctionService.register(data, function(result) {
+              alert("경매가 등록되었습니다.");
+              scope.registered = true;
+              scope.after.result = data;
+            });
 
             // 3. 선택한 작업 정보를 가져옵니다.
             workService.findById(scope.before.selectedWork, function(result) {
