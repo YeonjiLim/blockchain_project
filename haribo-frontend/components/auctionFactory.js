@@ -49,7 +49,7 @@ function createAuction(options, walletAddress, privateKey, onConfirm) {
   var tx = {
     from: walletAddress,
     to: AUCTION_CONTRACT_ADDRESS,
-    gas: 2000000,
+    gas: "2000000",
     data: encodedABI
   };
   web3.eth.signTransaction(tx).then(console.log);
