@@ -20,7 +20,10 @@ var auctionService = {
     });
   },
   findById: function(id, callback) {
-    $.get(API_BASE_URL + "/api/auctions/" + id, callback);
+    $.get(API_BASE_URL + "/api/auctions/" + id, function(data){
+      console.log(data)
+      callback(data);
+    });
   },
   // 경매 내역 저장
   saveBid: function(bidder, auctionId, bidPrice, callback) {
