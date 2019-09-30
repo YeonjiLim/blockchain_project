@@ -90,11 +90,13 @@ public class AuctionContractService implements IAuctionContractService {
 			Tuple7 t7 = auctionContract.getAuctionInfo().send();
 			log.info("t7", t7.toString());
 			String wallet_owner = auctionContract.highestBidder().send();
+			//auctionContract.bid
+			System.out.println("입찰자당:  "+wallet_owner);
 			if(wallet_owner.equals("0x0000000000000000000000000000000000000000")) {
 				System.out.println("입찰자가 없는걸?");
 				wallet_owner ="0";
 			}else {
-				wallet_owner = String.valueOf(walletRepository.search(wallet_owner).getId());
+				wallet_owner = String.valueOf(walletRepository.search(wallet_owner).getOwner_id());
 			}
 //			System.out.println(Long.parseLong(wallet_owner));
 			AuctionInfo auctioninfo = AuctionInfoFactory.creation(contract_address, Long.parseLong(wallet_owner) , t7);

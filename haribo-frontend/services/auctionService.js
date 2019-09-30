@@ -21,17 +21,17 @@ var auctionService = {
   },
   findById: function(id, callback) {
     $.get(API_BASE_URL + "/api/auctions/" + id, function(data){
-      console.log(data)
-      callback(data);
+      console.log(data);
+      callback(data)
     });
   },
   // 경매 내역 저장
   saveBid: function(bidder, auctionId, bidPrice, callback) {
     var data = {
-      경매참여자id: bidder,
-      경매id: auctionId,
-      입찰금액: bidPrice,
-      입찰일시: new Date()
+      auction_participant_id: bidder,
+      auction_id: auctionId,
+      bid_price: bidPrice,
+      bid_date: new Date()
     };
     $.ajax({
       type: "PUT",
