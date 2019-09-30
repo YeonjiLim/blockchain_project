@@ -40,8 +40,8 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
                                       <tr>
                                           <th>상태</th>
                                           <td>
-                                              <span class="badge badge-success" v-if="auction['status'] == false">경매 진행중</span>
-                                              <span class="badge badge-danger" v-if="auction['status'] == true">경매 종료</span>
+                                              <span class="badge badge-success" v-if="auction['ended'] == false">경매 진행중</span>
+                                              <span class="badge badge-danger" v-if="auction['ended'] == true">경매 종료</span>
                                           </td>
                                       </tr>
                                   </table>
@@ -121,7 +121,6 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
             // console.log(auction)
           var amount = Number(auction['lowest_price']).toLocaleString().split(",").join("")
           auction['lowest_price'] = web3.utils.fromWei(amount, 'ether');
-          console.log(auction);
           var workId = auction['item_id'];
   
           // 작품 정보 조회
