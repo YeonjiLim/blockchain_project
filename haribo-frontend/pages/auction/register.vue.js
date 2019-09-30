@@ -103,10 +103,12 @@ var auctionRegisterView = Vue.component("AuctionRegisterView", {
     };
   },
   methods: {
+    
     goBack: function() {
       this.$router.go(-1);
     },
     register: function() {
+      var scope = this;
       /**
        * 컨트랙트를 호출하여 경매를 생성하고
        * 경매 정보 등록 API를 호출합니다.
@@ -140,18 +142,6 @@ var auctionRegisterView = Vue.component("AuctionRegisterView", {
               contract_address: contractAddress
             };
             console.log(data);
-            // 3. 선택한 작업 정보를 가져옵니다.
-            workService.findById(scope.before.selectedWork, function(result) {
-              scope.after.work = result;
-            });
-
-            // 4. 생성한 경매를 등록 요청 합니다.
-            auctionService.register(data, function(result) {
-              alert("경매가 등록되었습니다.");
-              scope.registered = true;
-              scope.after.result = data;
-            });
-
             // 3. 선택한 작업 정보를 가져옵니다.
             workService.findById(scope.before.selectedWork, function(result) {
               scope.after.work = result;

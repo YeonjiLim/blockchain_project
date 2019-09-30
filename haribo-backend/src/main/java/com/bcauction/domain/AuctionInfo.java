@@ -62,5 +62,11 @@ public class AuctionInfo
 	public void setEnded(final boolean isEnded) {
 		this.isEnded = isEnded;
 	}
+	@Override
+	public String toString() {
+		return "AuctionInfo [contract_address=" + contract_address + ", highest_bid=" + highest_bid + ", item_id="
+				+ item_id + ", highest_bidder=" + highest_bidder + ", start_date=" + start_date + ", end_date="
+				+ end_date + ", lowest_price=" + lowest_price + ", isEnded=" + isEnded + "]";
+	}
 
 }
