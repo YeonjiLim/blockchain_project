@@ -1,4 +1,3 @@
-
 var auctionDetailView = Vue.component("AuctionDetailView", {
   template: `
           <div>
@@ -81,78 +80,83 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
               </div>
           </div>
       `,
-    data() {
-      return {
-        work: {},
-        creator: { id: 0 },
-        auction: {},
-        sharedStates: store.state,
-        bidder: {},
-        isCanceling: false,
-        isClosing: false,
-        wallet:{}
-      };
+  data() {
+    return {
+      work: {},
+      creator: { id: 0 },
+      auction: {},
+      sharedStates: store.state,
+      bidder: {},
+      isCanceling: false,
+      isClosing: false,
+      wallet: {}
+    };
+  },
+  methods: {
+    closeAuction: function() {
+      /**
+       * 컨트랙트를 호출하여 경매를 종료하고
+       * 경매 상태 업데이트를 위해 API를 호출합니다.
+       */
+      var scope = this;
+      var privateKey = window.prompt(
+        "경매를 종료하시려면 지갑 비밀키를 입력해주세요.",
+        ""
+      );
+      walletService.findById(scope.sharedStates.user.id, function(wallet) {
+        scope.wallet = wallet;
+        var options = {
+          contractAddress: scope.auction["contract_address"],
+          walletAddress: scope.wallet["address"],
+          privateKey: privateKey
+        };
+        auction_close(options, function(receipt) {
+          scope.auction.ended = true;
+          auctionService.close(
+            scope.$route.params.id,
+            scope.auction["highest_bidder"],
+            function(res) {
+              console.log({ res: res });
+            }
+          );
+          //auctionService.cancel();
+          //: function(auctionId, bidderId, callback, whenError)
+        });
+      });
+      // register.vue.js, bid.vue.js를 참조하여 완성해 봅니다.
     },
-    methods: {
-      closeAuction: function () {
-        /**
-         * 컨트랙트를 호출하여 경매를 종료하고
-         * 경매 상태 업데이트를 위해 API를 호출합니다.
-         */
-        var scope = this;
-        var privateKey = window.prompt(
-          "경매를 종료하시려면 지갑 비밀키를 입력해주세요.",
-          ""
-        );
-        walletService.findById(scope.sharedStates.user.id, function(wallet) {
-          scope.wallet = wallet;
-          var options = {
-            contractAddress: scope.auction["contract_address"],
-            walletAddress: scope.wallet["address"],
-            privateKey: privateKey
-          };
-          auction_close(options, function(receipt) {
-              scope.auction.ended = true;
-              auctionService.close(scope.$route.params.id,scope.auction['highest_bidder'],function(res){
-                console.log({"res":res});
-              });
-              //auctionService.cancel();
-              //: function(auctionId, bidderId, callback, whenError) 
-          })
+    cancelAuction: function() {
+      /**
+       * 컨트랙트를 호출하여 경매를 취소하고
+       * 경매 상태 업데이트를 위해 API를 호출합니다.
+       */
+      var scope = this;
+      var privateKey = window.prompt(
+        "경매를 취소하시려면 지갑 비밀키를 입력해주세요.",
+        ""
+      );
+      walletService.findById(scope.sharedStates.user.id, function(wallet) {
+        scope.wallet = wallet;
+        console.log({ user: scope.wallet }, function(err) {
+          console.log({ err: err });
         });
-        // register.vue.js, bid.vue.js를 참조하여 완성해 봅니다.
-      },
-      cancelAuction: function () {
-        /**
-         * 컨트랙트를 호출하여 경매를 취소하고
-         * 경매 상태 업데이트를 위해 API를 호출합니다.
-         */
-        var scope = this;
-        var privateKey = window.prompt(
-          "경매를 취소하시려면 지갑 비밀키를 입력해주세요.",
-          ""
-        );
-        walletService.findById(scope.sharedStates.user.id, function(wallet) {
-          scope.wallet = wallet;
-          console.log({"user":scope.wallet},function(err){
-            console.log({"err":err});
-          });
-          var options = {
-            contractAddress: scope.auction["contract_address"],
-            walletAddress: scope.wallet["address"],
-            privateKey: privateKey
-          };
-          auction_cancel(options, function(receipt) {
-            
-              scope.auction.ended = true;
-              auctionService.cancel(scope.$route.params.id,scope.auction['highest_bidder'],function(res){
-                console.log({"res":res});
-              });
-              //: function(auctionId, bidderId, callback, whenError) 
-          })
+        var options = {
+          contractAddress: scope.auction["contract_address"],
+          walletAddress: scope.wallet["address"],
+          privateKey: privateKey
+        };
+        auction_cancel(options, function(receipt) {
+          scope.auction.ended = true;
+          auctionService.cancel(
+            scope.$route.params.id,
+            scope.auction["highest_bidder"],
+            function(res) {
+              console.log({ res: res });
+            }
+          );
+          //: function(auctionId, bidderId, callback, whenError)
         });
-
-      }
+      });
     },
     cancelAuction: function() {
       /**
@@ -166,12 +170,15 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
       );
 
       // 경매 정보 조회
-      auctionService.findById(auctionId, function (auction) {
-        var amount = Number(auction['lowest_price']).toLocaleString().split(",").join("")
-        auction['lowest_price'] = web3.utils.fromWei(amount, 'ether');
-        console.log({"들어옴":auction });
-  
-        var workId = auction['item_id'];
+      auctionService.findById(auctionId, function(auction) {
+        var amount = Number(auction["lowest_price"])
+          .toLocaleString()
+          .split(",")
+          .join("");
+        auction["lowest_price"] = web3.utils.fromWei(amount, "ether");
+        console.log({ 들어옴: auction });
+
+        var workId = auction["item_id"];
         // console.log(workId)
         // 작품 정보 조회
         workService.findById(workId, function(work) {
@@ -183,18 +190,25 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
           });
         });
         // 입찰자 조회
-        if (auction['highest_bid'] > 0) {
-          var amount = Number(auction['highest_bid']).toLocaleString().split(",").join("")
-          auction['highest_bid'] = web3.utils.fromWei(amount, 'ether');
-          var bidderId = auction['highest_bidder'];
-  
-          userService.findById(bidderId, function (user) {
+        if (auction["highest_bid"] > 0) {
+          var amount = Number(auction["highest_bid"])
+            .toLocaleString()
+            .split(",")
+            .join("");
+          auction["highest_bid"] = web3.utils.fromWei(amount, "ether");
+          var bidderId = auction["highest_bidder"];
+
+          userService.findById(bidderId, function(user) {
             scope.bidder = user;
           });
         }
 
         scope.auction = auction;
-        console.log({"auction":auction,"auctionId":scope.auction["id"],"bidder":scope.auction['highest_bidder']});
+        console.log({
+          auction: auction,
+          auctionId: scope.auction["id"],
+          bidder: scope.auction["highest_bidder"]
+        });
       });
     }
   },
