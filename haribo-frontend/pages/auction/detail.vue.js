@@ -174,7 +174,7 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
             scope.creator = user;
           });
         });
-  
+        
         // 입찰자 조회
         if (auction['bid_price'] > 0) {
           var amount = Number(auction['bid_price']).toLocaleString().split(",").join("")
