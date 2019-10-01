@@ -1,23 +1,25 @@
 package com.bcauction.application.impl;
 
-import com.bcauction.application.IAuctionContractService;
-import com.bcauction.application.IAuctionService;
-import com.bcauction.application.IFabricService;
-import com.bcauction.domain.Auction;
-import com.bcauction.domain.Bid;
-import com.bcauction.domain.Ownership;
-import com.bcauction.domain.exception.ApplicationException;
-import com.bcauction.domain.exception.NotFoundException;
-import com.bcauction.domain.repository.IAuctionRepository;
-import com.bcauction.domain.repository.IBidRepository;
+
+import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
-import java.time.LocalDateTime;
-import java.util.List;
+import com.bcauction.application.IAuctionContractService;
+import com.bcauction.application.IAuctionService;
+import com.bcauction.application.IFabricService;
+import com.bcauction.domain.Auction;
+import com.bcauction.domain.AuctionInfo;
+import com.bcauction.domain.Bid;
+import com.bcauction.domain.DigitalWork;
+import com.bcauction.domain.repository.IAuctionRepository;
+import com.bcauction.domain.repository.IBidRepository;
+import com.bcauction.domain.repository.IDigitalWorkRepository;
 
 @Service
 public class AuctionService implements IAuctionService
@@ -28,15 +30,18 @@ public class AuctionService implements IAuctionService
 	private IFabricService fabricService;
 	private IAuctionRepository auctionRepository;
 	private IBidRepository bidRepository;
+	private IDigitalWorkRepository digitalWorkRepository;
+	
 
 	@Autowired
 	public AuctionService(IAuctionContractService auctionContractService,
 						  IFabricService fabricService,
-							IAuctionRepository auctionRepository, IBidRepository bidRepository) {
+							IAuctionRepository auctionRepository, IBidRepository bidRepository,IDigitalWorkRepository digitalWorkRepository) {
 		this.auctionContractService = auctionContractService;
 		this.fabricService = fabricService;
 		this.auctionRepository = auctionRepository;
 		this.bidRepository = bidRepository;
+		this.digitalWorkRepository=digitalWorkRepository;
 	}
 
 	@Override
@@ -100,8 +105,23 @@ public class AuctionService implements IAuctionService
 	@Override
 	public Auction auctionEnd(final long auction_id, final long member_id)
 	{
-		// TODO
-		return null;
+		// TODO/
+		//V - E
+		Auction auction=auctionRepository.search(auction_id);
+		auction.setStatus("E");
+		auctionRepository.update(auction);
+		AuctionInfo ai=auctionContractService.searchAuctionInfo(auction.getContract_address());
+		
+		if(member_id!=0) {
+			Bid bid=bidRepository.search(auction_id, ai.getHighest_bidder(), ai.getHighest_bid().divide(new BigInteger("1000000000000000000")));
+			bid.setWinning_bid("Y");
+			this.bidRepository.update(bid);
+			
+			DigitalWork item=digitalWorkRepository.search( auction.getAuction_item_id());
+			item.setMember_id(bid.getAuction_participant_id());
+			fabricService.trensferPossession(auction.getAuction_creater_id(), bid.getAuction_participant_id(), item.getId());			
+		}
+		return auction;
 	}
 
 	/**
@@ -117,7 +137,22 @@ public class AuctionService implements IAuctionService
 	@Override
 	public Auction auctionCancel(final long auction_id, final long member_id)
 	{
-		// TODO
-		return null;
+		Auction auction=auctionRepository.search(auction_id);
+		auction.setStatus("C");
+		
+		AuctionInfo ai=auctionContractService.searchAuctionInfo(auction.getContract_address());
+		if(member_id!=0) {
+			Bid bid=bidRepository.search(auction_id, ai.getHighest_bidder(), ai.getHighest_bid());
+			bid.setWinning_bid("Y");
+			bidRepository.update(bid);
+		}
+		auctionRepository.update(auction);
+		return auction;
+	}
+
+	@Override
+	public List<Auction> searchByOwner(long id) {
+		
+		return this.auctionRepository.searchByOwner(id);
 	}
 }

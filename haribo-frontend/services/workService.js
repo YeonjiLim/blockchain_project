@@ -27,7 +27,7 @@ var workService = {
           userService.findById(history.owner, function(user) {
             result.push({
               createdAt: history.createdAt,
-              owner: user["이름"] + " (" + user["이메일"] + ")"
+              owner: user["name"] + " (" + user["email"] + ")"
             });
 
             loadUser(from + 1, until);

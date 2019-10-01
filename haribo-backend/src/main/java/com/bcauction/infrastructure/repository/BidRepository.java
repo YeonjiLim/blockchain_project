@@ -120,6 +120,7 @@ public class BidRepository implements IBidRepository
 									bid.getBid_price()
 							});
 		} catch (Exception e) {
+			System.out.println("에러난다"+e);
 			throw new RepositoryException(e, e.getMessage());
 		}
 	}

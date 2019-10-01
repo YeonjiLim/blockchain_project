@@ -47,6 +47,11 @@ public class Bid
 	public void setWinning_bid(final String winning_bid) {
 		this.winning_bid = winning_bid;
 	}
-
+	@Override
+	public String toString() {
+		return "Bid [id=" + id + ", auction_participant_id=" + auction_participant_id + ", auction_id=" + auction_id
+				+ ", bid_date=" + bid_date + ", bid_price=" + bid_price + ", winning_bid=" + winning_bid + "]";
+	}
+	
 	
 }

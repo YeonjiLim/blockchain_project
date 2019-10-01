@@ -131,7 +131,7 @@ var auctionRegisterView = Vue.component("AuctionRegisterView", {
           walletAddress,
           scope.before.input.privateKey,
           function(log) {
-            console.log(log);
+            console.log('log',log);
             var contractAddress = log[0];
             var data = {
               auction_creater_id: scope.sharedStates.user.id,

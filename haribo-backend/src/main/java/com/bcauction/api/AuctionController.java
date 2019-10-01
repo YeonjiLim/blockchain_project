@@ -37,6 +37,7 @@ public class AuctionController
 
 	@RequestMapping(value = "/auctions", method = RequestMethod.POST)
 	public Auction create(@RequestBody Auction auction) {
+		System.out.println(auction);
 		Auction auc = auctionService.create(auction);
 		if( auc == null )
 			throw new ApplicationException("auction 정보를 입력할 수 없습니다!");
@@ -75,11 +76,13 @@ public class AuctionController
 
 	@RequestMapping(value = "/auctions/{aid}/by/{mid}", method = RequestMethod.DELETE)
 	public Auction auction취소(@PathVariable long aid, @PathVariable long mid) {
+		System.out.println("들어는 온다2");
 		return auctionService.auctionCancel(aid, mid);
 	}
 
 	@RequestMapping(value = "/auctions/{aid}/by/{mid}", method = RequestMethod.PUT)
 	public Auction auction종료(@PathVariable long aid, @PathVariable long mid) { //mid = 최고가 입찰자 id
+		System.out.println("들어는 온다");
 		return this.auctionService.auctionEnd(aid, mid);
 	}
 
@@ -97,8 +100,7 @@ public class AuctionController
 	 */
 	@RequestMapping(value = "/auctions/owner/{id}", method = RequestMethod.GET)
 	public List<Auction> memberAuctionListSearch(@PathVariable int id){
-		// TODO
-		return null;
+		return auctionService.searchByOwner(id);
 	}
 
 }
