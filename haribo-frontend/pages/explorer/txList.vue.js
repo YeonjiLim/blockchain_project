@@ -44,6 +44,15 @@ var explorerTxListView = Vue.component("ExplorerTxListView", {
       /**
        * TODO 최근 블록에 포함된 트랜잭션 리스트를 반환합니다.
        */
+      var scope = this;
+      exploreService.findCurrentTransaction(function(data){
+        // console.log(data)
+        //   for (let index = 0; index < data.length; index++) {
+        //       scope.contracts.push(data[index].contract_address)
+        //   }
+        //   scope.items = data;
+        //   console.log(scope.contracts)
+      })
     }
   },
   mounted: function() {
