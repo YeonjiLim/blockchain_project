@@ -23,7 +23,7 @@ var explorerAuctionDetailView = Vue.component("ExplorerDetailView", {
                             </tr>
                             <tr>
                                 <th width="20%">작품</th>
-                                <td><router-link :to="{ name: 'work.detail', params: { id: work['id'] }}">{{ work && work['이름'] }}</router-link></td>
+                                <td><router-link :to="{ name: 'work.detail', params: { id: work['id'] }}">{{ work && work['id'] }}</router-link></td>
                             </tr>
                             <tr>
                                 <th>Status</th>
@@ -34,21 +34,21 @@ var explorerAuctionDetailView = Vue.component("ExplorerDetailView", {
                             </tr>
                             <tr>
                                 <th>Start Time Time</th>
-                                <td>{{ contract && contract.startTime.toLocaleString() }}</td>
+                                <td>{{ contract && contract.start_date.toLocaleString() }}</td>
                             </tr>
                             <tr>
                                 <th>Expire Time</th>
-                                <td>{{ contract && contract.endTime.toLocaleString() }}</td>
+                                <td>{{ contract && contract.end_date.toLocaleString() }}</td>
                             </tr>
                             <tr>
                                 <th>Highest Bid</th>
-                                <td>{{ contract && contract.highestBid }} ETH</td>
+                                <td>{{ contract && contract.highest_bid }} ETH</td>
                             </tr>
                             <tr>
                                 <th>Highest Bidder</th>
                                 <td>
-                                    <span v-if="contract && contract.highestBid == 0">-</span>
-                                    <span v-if="contract && contract.highestBid != 0">{{ contract && contract.highestBidder }}</span>
+                                    <span v-if="contract && contract.highest_bidder == 0">-</span>
+                                    <span v-if="contract && contract.highest_bidder != 0">{{ contract && contract.highest_bidder }}</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -68,8 +68,15 @@ var explorerAuctionDetailView = Vue.component("ExplorerDetailView", {
     };
   },
   mounted: async function() {
-    var contractAddress = this.$route.params.contractAddress;
-    console.log(contractAddress)
+    var scope = this;
+    scope.contractAddress = this.$route.params.contractAddress;
+    exploreService.findAuction(scope.contractAddress, function(data){
+        var HighestBid = Number(data.highest_bid).toLocaleString().split(",").join("")
+        data.highest_bid = web3.utils.fromWei(HighestBid, 'ether');
+        scope.contract = data;
+        console.log(data)
+        scope.work.id = data.item_id;
+    });
     /**
      * TODO 경매 컨트랙트로부터 경매 정보를 가져옵니다.
      */

@@ -37,6 +37,7 @@ public class AuctionController
 
 	@RequestMapping(value = "/auctions", method = RequestMethod.POST)
 	public Auction create(@RequestBody Auction auction) {
+		System.out.println(auction);
 		Auction auc = auctionService.create(auction);
 		if( auc == null )
 			throw new ApplicationException("auction 정보를 입력할 수 없습니다!");

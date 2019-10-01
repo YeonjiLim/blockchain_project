@@ -520,7 +520,7 @@ function createAuction(options, walletAddress, privateKey, onConfirm){
     .then(function(res){
         console.log(res);
         web3.eth.sendSignedTransaction(res.rawTransaction).on("receipt" , receipt =>{
-            console.log(receipt);
+            console.log(1,receipt);
             var newaddress = web3.eth.abi.decodeParameters(['address','uint256','uint256','uint256','uint256','uint256'], receipt.logs[0].data);
             // console.log(newaddress);
             onConfirm(newaddress);
