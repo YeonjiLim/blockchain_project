@@ -52,7 +52,7 @@ public class EthereumController {
     public List<EthereumTransaction> searchCurrentTransaction()
     {
         List<EthereumTransaction> list = this.explorerService.searchCurrentTransaction();
-
+        System.out.println("success");
         if (list == null || list.isEmpty() )
             throw new EmptyListException("NO DATA");
 
@@ -95,7 +95,7 @@ public class EthereumController {
     @GetMapping("/auctions")
     public List<AuctionInfo> auctionContractAddressList(){
         List<String> auction_list = this.auctionContractService.auctionContractAddressList();
-        System.out.println(auction_list.size());
+//        System.out.println(auction_list.size());
         if(auction_list == null || auction_list.isEmpty())
             throw new EmptyListException("NO DATA");
 

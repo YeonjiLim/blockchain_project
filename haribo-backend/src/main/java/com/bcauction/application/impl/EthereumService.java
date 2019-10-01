@@ -30,6 +30,7 @@ import org.web3j.utils.Numeric;
 import com.bcauction.application.IEthereumService;
 import com.bcauction.domain.Address;
 import com.bcauction.domain.CommonUtil;
+import com.bcauction.domain.Transaction;
 import com.bcauction.domain.exception.ApplicationException;
 import com.bcauction.domain.repository.ITransactionRepository;
 import com.bcauction.domain.wrapper.Block;
@@ -97,6 +98,14 @@ public class EthereumService implements IEthereumService {
 	public List<EthereumTransaction> searchCurrentTransaction()
 	{
 		// TODO
+		List<Transaction> t = this.transactionRepository.checkList();
+		if(t.size()==0) {
+			System.out.println("트랜잭션이 존재하지 않습니다.");
+		}
+		for(int i=0;i<t.size();i++) {
+			System.out.println("----------------------------------------------------------");
+			System.out.println(t);
+		}
 		return null;
 	}
 
@@ -157,7 +166,7 @@ public class EthereumService implements IEthereumService {
            if (personalUnlockAccount.accountUnlocked()) {
                System.out.println("해제됨");
            }
-           System.out.println(ADMIN_WALLET_FILE);
+           //System.out.println(ADMIN_WALLET_FILE);
            Credentials credentials1 =CommonUtil.getCredential(ADMIN_WALLET_FILE, PASSWORD);
            EthGetTransactionCount ethGetTransactionCount = _web3j.ethGetTransactionCount(
                    ADMIN_ADDRESS, DefaultBlockParameterName.LATEST).sendAsync().get();

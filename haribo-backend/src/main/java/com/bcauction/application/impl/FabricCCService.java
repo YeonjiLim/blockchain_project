@@ -231,7 +231,7 @@ public class FabricCCService implements IFabricCCService
 	 * @return boolean
 	 */
 	private synchronized boolean registerAsset(final long item_id, final long owner) {
-		System.out.println(item_id+"  "+owner);
+		//System.out.println(item_id+"  "+owner);
 		//QueryByChaincodeRequest qpr =hfClient.newQueryProposalRequest();
 		 TransactionProposalRequest qpr = hfClient.newTransactionProposalRequest();
 			
