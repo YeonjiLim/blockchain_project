@@ -95,15 +95,19 @@ public class EthereumController {
     @GetMapping("/auctions")
     public List<AuctionInfo> auctionContractAddressList(){
         List<String> auction_list = this.auctionContractService.auctionContractAddressList();
-
+        System.out.println(auction_list.size());
         if(auction_list == null || auction_list.isEmpty())
             throw new EmptyListException("NO DATA");
 
         List<AuctionInfo> auction_info_list = new ArrayList<>();
-        auction_list.forEach(auction -> {
-            AuctionInfo auction_info = this.auctionContractService.searchAuctionInfo(auction);
+        for (int i = 0; i < 10; i++) {
+        	AuctionInfo auction_info = this.auctionContractService.searchAuctionInfo(auction_list.get(i));
             auction_info_list.add(auction_info);
-        });
+		}
+//        auction_list.forEach(auction -> {
+//            AuctionInfo auction_info = this.auctionContractService.searchAuctionInfo(auction);
+//            auction_info_list.add(auction_info);
+//        });
 
         return auction_info_list;
     }
