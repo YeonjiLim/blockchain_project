@@ -127,6 +127,7 @@ var worksDetailView = Vue.component("WorkDetailView", {
 
     // 작품 이력 조회
     workService.findHistoryById(workId, function(data) {
+      console.log(data);
       scope.history = data;
     });
   }

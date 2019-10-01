@@ -155,7 +155,7 @@ public class FabricService implements IFabricService
 
 		// TODO
 
-		return null;
+		return history;
 	}
 
 	/**
