@@ -23,6 +23,7 @@ public interface IAuctionRepository
 	List<Auction> checkList();
 	Auction search(long id);
 	Auction search(String contract_address);
+	List<Auction> searchByOwner(long id);
 
 	@Transactional
 	long create(Auction auction);

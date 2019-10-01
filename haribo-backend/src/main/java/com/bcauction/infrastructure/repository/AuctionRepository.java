@@ -94,12 +94,12 @@ public class AuctionRepository implements IAuctionRepository
 	public int update(final Auction auction)
 	{
 		StringBuilder sbSql =  new StringBuilder("UPDATE auction ");
-		sbSql.append("SET set=? AND end_date=? ");
+		sbSql.append("SET status=? , end_date=? ");
 		sbSql.append("where id=? AND auction_creater_id=? AND auction_item_id=?");
 		try {
 			return this.jdbcTemplate.update(sbSql.toString(),
 			                                new Object[] {
-					                           auction.getStatus(),
+			                                   auction.getStatus(),
 					                           auction.getEnd_date(),
 					                           auction.getId(),
 					                           auction.getAuction_creater_id(),
@@ -118,6 +118,18 @@ public class AuctionRepository implements IAuctionRepository
 		try {
 			return this.jdbcTemplate.update(sbSql.toString(),
 			                                new Object[] { id });
+		} catch (Exception e) {
+			throw new RepositoryException(e, e.getMessage());
+		}
+	}
+
+	@Override
+	public List<Auction> searchByOwner(long id) {
+		StringBuilder sbSql =  new StringBuilder("SELECT * FROM auction WHERE auction_creater_id=? AND status='V'");
+
+		try {
+			return this.jdbcTemplate.query(sbSql.toString(),
+			                               new Object[]{ id }, (rs, rowNum) -> AuctionFactory.create(rs));
 		} catch (Exception e) {
 			throw new RepositoryException(e, e.getMessage());
 		}

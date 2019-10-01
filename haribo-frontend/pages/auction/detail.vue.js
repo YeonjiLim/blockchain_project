@@ -106,7 +106,6 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
         );
         walletService.findById(scope.sharedStates.user.id, function(wallet) {
           scope.wallet = wallet;
-          console.log({"user":scope.wallet});
           var options = {
             contractAddress: scope.auction["contract_address"],
             walletAddress: scope.wallet["address"],
@@ -114,6 +113,11 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
           };
           auction_close(options, function(receipt) {
               scope.auction.ended = true;
+              auctionService.close(scope.$route.params.id,scope.auction['highest_bidder'],function(res){
+                console.log({"res":res});
+              });
+              //auctionService.cancel();
+              //: function(auctionId, bidderId, callback, whenError) 
           })
         });
         // register.vue.js, bid.vue.js를 참조하여 완성해 봅니다.
@@ -130,16 +134,21 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
         );
         walletService.findById(scope.sharedStates.user.id, function(wallet) {
           scope.wallet = wallet;
-          console.log({"user":scope.wallet});
+          console.log({"user":scope.wallet},function(err){
+            console.log({"err":err});
+          });
           var options = {
             contractAddress: scope.auction["contract_address"],
             walletAddress: scope.wallet["address"],
             privateKey: privateKey
           };
-          console.log({"옵션!":options});
           auction_cancel(options, function(receipt) {
-              console.log(receipt);
+            
               scope.auction.ended = true;
+              auctionService.cancel(scope.$route.params.id,scope.auction['highest_bidder'],function(res){
+                console.log({"res":res});
+              });
+              //: function(auctionId, bidderId, callback, whenError) 
           })
         });
 
@@ -180,6 +189,7 @@ var auctionDetailView = Vue.component("AuctionDetailView", {
         }
   
         scope.auction = auction;
+        console.log({"auction":auction,"auctionId":scope.auction["id"],"bidder":scope.auction['highest_bidder']});
       });
     }
   });
