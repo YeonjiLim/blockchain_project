@@ -104,4 +104,13 @@ public class Auction
 	{
 		this.contract_address = contract_address;
 	}
+
+	@Override
+	public String toString() {
+		return "Auction [id=" + id + ", auction_creater_id=" + auction_creater_id + ", auction_item_id="
+				+ auction_item_id + ", creation_date=" + creation_date + ", status=" + status + ", start_date="
+				+ start_date + ", end_date=" + end_date + ", lowest_price=" + lowest_price + ", contract_address="
+				+ contract_address + "]";
+	}
+	
 }
