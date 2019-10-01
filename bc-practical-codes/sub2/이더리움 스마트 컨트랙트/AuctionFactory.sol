@@ -71,11 +71,12 @@ contract Auction {
       auctionStartTime = startTime;
       auctionEndTime = endTime; 
   }
+
   function bid() public payable 
   onlyNotOwner 
   onlyBeforeEnd 
   onlyHigherThanMinValue 
-  onlyHigherThanCurrentHighest{
+  onlyHigherThanCurrentHighest{ 
      
       if(highestBid > 0) {
         pendingReturns[highestBidder] += highestBid;
@@ -85,6 +86,7 @@ contract Auction {
       bidders.push(msg.sender);
       emit HighestBidIncereased(msg.sender, msg.value);
   }
+  
   function getTimeLeft() public view returns (uint) {
       return (auctionEndTime - now);
   }
