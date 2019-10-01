@@ -5,8 +5,8 @@ var exploreService = {
             callback(data)
         })
     },
-    findAuctiondetail : function(contractaddress, callback) {
-        $.get(API_BASE_URL + "/api/eth/auctiondetail/"+contractaddress, function(data){
+    findAuction : function(contractaddress, callback) {
+        $.get(API_BASE_URL + "/api/eth/auctions/"+contractaddress, function(data){
             console.log(data)
             callback(data)
         })
