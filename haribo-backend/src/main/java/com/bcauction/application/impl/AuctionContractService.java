@@ -1,27 +1,17 @@
 package com.bcauction.application.impl;
 
-import java.io.Console;
-import java.io.File;
-import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import org.hyperledger.fabric.sdk.BlockInfo.TransactionEnvelopeInfo.TransactionActionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.RemoteCall;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tuples.generated.Tuple7;
-import org.web3j.tx.RawTransactionManager;
-import org.web3j.tx.TransactionManager;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
 
@@ -33,7 +23,6 @@ import com.bcauction.domain.CommonUtil;
 import com.bcauction.domain.repository.IWalletRepository;
 import com.bcauction.domain.wrapper.AuctionContract;
 import com.bcauction.domain.wrapper.AuctionFactoryContract;
-import com.bcauction.infrastructure.repository.WalletRepository;
 
 /**
  * AuctionContractService
@@ -140,7 +129,19 @@ public class AuctionContractService implements IAuctionContractService {
 	@Override
 	public List<String> auctionContractAddressList()
 	{
-		// TODO
+		System.out.println("일단 여기임!!!");
+		System.out.println(AUCTION_FACTORY_CONTRACT);
+		credentials = CommonUtil.getCredential(WALLET_RESOURCE, PASSWORD);
+		auctionFactoryContract = AuctionFactoryContract.load(
+				AUCTION_FACTORY_CONTRACT, web3j, credentials, contractGasProvider);
+		try {
+			List<String> auctionlist = auctionFactoryContract.allAuctions().send();
+			System.out.println(auctionlist);
+			return auctionlist;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 }
