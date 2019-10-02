@@ -16,8 +16,8 @@ var exploreraddressView = Vue.component("ExplorerAddressView", {
                         <tbody>
                             <tr>
                                 <td>
-                                    <input type ="text" style="width : 88%; height : 38px">
-                                    <button class = "btn btn-primary">조회</button>
+                                    <input type ="text" v-model="Aaddress" style="width : 88%; height : 38px">
+                                    <router-link class="btn btn-primary" :to="{ name: 'explorer.auction.detail', params: { contractAddress: Aaddress } }">조회</router-link>
                                     <router-link class="btn btn-primary" v-bind:class="{ active: path.startsWith('/explorer/auction') }" :to="{ name: 'explorer.auction'}">목록</router-link>
                                 </td>
                             </tr>
@@ -30,8 +30,8 @@ var exploreraddressView = Vue.component("ExplorerAddressView", {
                         <tbody>
                             <tr>
                                 <td>
-                                    <input type ="text" style="width : 88%; height : 38px">
-                                    <button class = "btn btn-primary">조회</button>
+                                    <input type ="text" v-model="Baddress" style="width : 88%; height : 38px">
+                                    <router-link class="btn btn-primary" :to="{name:'explorer.block.detail', params: {blockNumber:Baddress}}">조회</router-link>
                                     <router-link class="btn btn-primary" v-bind:class="{ active: path.startsWith('/explorer/block') }" :to="{ name: 'explorer.block'}">목록</router-link>
                                 </td>
                             </tr>
@@ -46,8 +46,8 @@ var exploreraddressView = Vue.component("ExplorerAddressView", {
                         <tbody>
                             <tr>
                                 <td>
-                                    <input type ="text" style="width : 88%; height : 38px">
-                                    <button class = "btn btn-primary">조회</button>
+                                    <input type ="text" v-model="Taddress" style="width : 88%; height : 38px">
+                                    <router-link class="btn btn-primary" :to="{name: 'explorer.tx.detail', params: { hash: Taddress }}">조회</router-link>
                                     <router-link class="btn btn-primary" v-bind:class="{ active: path.startsWith('/explorer/tx') }" :to="{ name: 'explorer.tx'}">목록</router-link>
                                 </td>
                             </tr>
@@ -64,23 +64,17 @@ var exploreraddressView = Vue.component("ExplorerAddressView", {
         path: "",
         contracts: [],
         items: [],
-        A: false,
-        B: false,
-        T: false
+        Aaddress : "",
+        Baddress : "",
+        Taddress : ""
       };
     },
     methods : {
-        change : function(something){
-            alert(something)
-            this.A = !something
+        search(data){
+            alert(data)
         }
     },
     mounted: async function() {
-      /**
-       * TODO
-       * 1. AuctionFactory 컨트랙트로부터 경매컨트랙트 주소 리스트를 가져옵니다.
-       * 2. 각 컨트랙트 주소로부터 경매의 상태(state) 정보를 가져옵니다.
-       * */
       
       this.path = this.$route.path;
         var scope = this;
