@@ -135,6 +135,7 @@ public class EthereumService implements IEthereumService {
 			block.setSize(ethBlock.getBlock().getSize());
 			block.setTimestamp(LocalDateTime.ofInstant(Instant.ofEpochSecond(ethBlock.getBlock().getTimestamp().longValue()), TimeZone.getDefault().toZoneId()));
 			block.setTrans(EthereumTransaction.getEthereumTransactionList(ethBlock.getBlock().getTransactions(), ethBlock.getBlock().getTimestamp(), true));
+			block.setNonce(ethBlock.getBlock().getNonce());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
