@@ -141,7 +141,7 @@ public class EthereumService implements IEthereumService {
 	public EthereumTransaction searchTransaction(String transaction_hash)
 	{
 		// TODO
-		Transaction transaction = new Transaction();
+		EthereumTransaction transaction = new EthereumTransaction();
         try {
             EthTransaction ethTransaction = web3j.ethGetTransactionByHash(transaction_hash).send();
             System.out.println("이더리움 트랜잭션 정보입니다."+ethTransaction.getTransaction());
