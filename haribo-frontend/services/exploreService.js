@@ -11,8 +11,20 @@ var exploreService = {
             callback(data)
         })
     },
+    searchLatest20Blocks : function(callback){
+      $.get(API_BASE_URL + "/api/eth/blocks", function(data){
+        console.log(data)
+        callback(data)
+      })
+    },
+    searchBlockByNumber : function(number, callback) {
+      $.get(API_BASE_URL + "/api/eth/blocks/" + number, function(data){
+        console.log(data);
+        callback(data)
+      })
+    },
     findCurrentTransaction : function(callback){
-        $.get(API_BASE_URL + "/api/eth/trans",function(data){
+        $.get(API_BASE_URL + "/trans",function(data){
             console.log(data)
         })
     }
