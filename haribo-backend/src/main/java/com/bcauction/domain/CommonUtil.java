@@ -73,7 +73,7 @@ public class CommonUtil
 
 		ClassPathResource classPathResource = new ClassPathResource(filePath);
 		String protocol = classPathResource.getURL().getProtocol();
-		// logger.info(protocol + "| url=" + classPathResource.getURL());
+//		logger.info(protocol + "| url=" + classPathResource.getURL());
 
 		if(protocol.equals("file"))
 			return classPathResource.getFile();
@@ -94,7 +94,6 @@ public class CommonUtil
 	}
 
 	public static LocalDateTime ETHTimestamp_Conversion(long value) {
-		System.out.println("##############################"+value);
 		return LocalDateTime.ofInstant(Instant.ofEpochMilli(value),
 				TimeZone.getDefault().toZoneId());
 	}

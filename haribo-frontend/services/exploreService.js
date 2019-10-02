@@ -24,7 +24,7 @@ var exploreService = {
       })
     },
     findCurrentTransaction : function(callback){
-        $.get(API_BASE_URL + "/trans",function(data){
+        $.get(API_BASE_URL + "/api/eth/trans",function(data){
             console.log(data)
         })
     }

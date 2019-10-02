@@ -25,7 +25,9 @@ import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.DefaultBlockParameterNumber;
+import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.EthBlock.TransactionResult;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
@@ -110,14 +112,29 @@ public class EthereumService implements IEthereumService {
 	@Override
 	public List<EthereumTransaction> searchCurrentTransaction()
 	{
-		// TODO
-		List<Transaction> t = this.transactionRepository.checkList();
-		if(t.size()==0) {
-			System.out.println("트랜잭션이 존재하지 않습니다.");
+		List<Transaction> trans;
+		EthBlock latestBlockResponse;
+		List<EthereumTransaction> trans_list=new ArrayList<>();
+		try {
+			latestBlockResponse
+					= web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, true).sendAsync().get();
+			// 최근 블럭을 찾아서
+			
+			trans = latestBlockResponse.getBlock().getTransactions();
+			System.out.println(trans);
+//			for (int i = 0; i < trans.size(); i++) {
+//				trans_list.add(EthereumTransaction.convertTransaction(trans.get(i));
+//			}
+			return trans_list;
+			
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		
-		return null;
+		
+		return trans_list;
 	}
 
 	/**
@@ -130,21 +147,14 @@ public class EthereumService implements IEthereumService {
 	public Block searchBlock(String block_number)
 	{
 		// TODO
-		Block block = new Block();
+		Block block=null;
+		EthBlock latestBlockResponse;
 		try {
-			EthBlock ethBlock = web3j.ethGetBlockByNumber(new DefaultBlockParameterNumber(new BigInteger(block_number)), false).send();
-			block.setBlockNo(ethBlock.getBlock().getNumber());
-			block.setDifficulty(String.valueOf(ethBlock.getBlock().getDifficulty()));
-			block.setGasLimit(ethBlock.getBlock().getGasLimit());
-			block.setGasUsed(ethBlock.getBlock().getGasUsed());
-			block.setHash(ethBlock.getBlock().getHash());
-			block.setMiner(ethBlock.getBlock().getMiner());
-			block.setParentHash(ethBlock.getBlock().getParentHash());
-			block.setSize(ethBlock.getBlock().getSize());
-			block.setTimestamp(LocalDateTime.ofInstant(Instant.ofEpochSecond(ethBlock.getBlock().getTimestamp().longValue()), TimeZone.getDefault().toZoneId()));
-			block.setTrans(EthereumTransaction.getEthereumTransactionList(ethBlock.getBlock().getTransactions(), ethBlock.getBlock().getTimestamp(), true));
-			block.setNonce(ethBlock.getBlock().getNonce());
-		} catch (IOException e) {
+			latestBlockResponse
+					= web3j.ethGetBlockByNumber(DefaultBlockParameterName.valueOf(block_number), true).sendAsync().get();
+			return block.fromOriginalBlock(latestBlockResponse.getBlock());
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return block;
@@ -156,37 +166,25 @@ public class EthereumService implements IEthereumService {
 	 * @param 트랜잭션Hash
 	 * @return EthereumTransaction
 	 */
-//    private String txHash;
-//    private String Status;
-//    private String blockId;
-//    private LocalDateTime timestamp;
-//    private String from;
-//    private String to;
-//    private BigInteger amount;
-//    private boolean accepted;
 	@Override
 	public EthereumTransaction searchTransaction(String transaction_hash)
 	{
 		// TODO
-		EthereumTransaction transaction = new EthereumTransaction();
-        try {
-            EthTransaction ethTransaction = web3j.ethGetTransactionByHash(transaction_hash).send();
-            System.out.println("이더리움 트랜잭션 정보입니다."+ethTransaction.getTransaction());
-            
-//            block.setBlockNo(ethBlock.getBlock().getNumber());
-//            block.setDifficulty(String.valueOf(ethBlock.getBlock().getDifficulty()));
-//            block.setGasLimit(ethBlock.getBlock().getGasLimit());
-//            block.setGasUsed(ethBlock.getBlock().getGasUsed());
-//            block.setHash(ethBlock.getBlock().getHash());
-//            block.setMiner(ethBlock.getBlock().getMiner());
-//            block.setParentHash(ethBlock.getBlock().getParentHash());
-//            block.setSize(ethBlock.getBlock().getSize());
-//            block.setTimestamp(LocalDateTime.ofInstant(Instant.ofEpochSecond(ethBlock.getBlock().getTimestamp().longValue()), TimeZone.getDefault().toZoneId()));
-//            block.setTrans(EthereumTransaction.getEthereumTransactionList(ethBlock.getBlock().getTransactions(), ethBlock.getBlock().getTimestamp(), true));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return transaction;
+		EthereumTransaction trans=null;
+		Request<?, EthTransaction> latestTransResponse;
+		Block block=null;
+		EthBlock latestBlockResponse;
+		try {
+			latestBlockResponse
+			= web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, true).sendAsync().get();
+			latestTransResponse
+					= web3j.ethGetTransactionByHash(transaction_hash);
+			return trans.convertTransaction(latestTransResponse);
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return trans;
 	}
 
 	/**
