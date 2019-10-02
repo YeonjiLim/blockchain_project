@@ -1,21 +1,28 @@
 package com.bcauction.api;
 
-import com.bcauction.application.IAuctionContractService;
-import com.bcauction.application.IEthereumService;
-import com.bcauction.domain.Address;
-import com.bcauction.domain.AuctionInfo;
-import com.bcauction.domain.wrapper.Block;
-import com.bcauction.domain.wrapper.EthereumTransaction;
-import com.bcauction.domain.exception.EmptyListException;
-import com.bcauction.domain.exception.NotFoundException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.bcauction.application.IAuctionContractService;
+import com.bcauction.application.IEthereumService;
+import com.bcauction.domain.Address;
+import com.bcauction.domain.Auction;
+import com.bcauction.domain.AuctionInfo;
+import com.bcauction.domain.exception.EmptyListException;
+import com.bcauction.domain.exception.NotFoundException;
+import com.bcauction.domain.wrapper.Block;
+import com.bcauction.domain.wrapper.EthereumTransaction;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -117,7 +124,7 @@ public class EthereumController {
         AuctionInfo auction_info = this.auctionContractService.searchAuctionInfo(addr);
         if(auction_info == null)
             throw new NotFoundException(addr + " auction 정보를 찾을 수 없습니다.");
-
+        System.out.println(auction_info);
         return auction_info;
     }
 }

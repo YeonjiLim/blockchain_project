@@ -37,7 +37,7 @@ var myArtworkView = Vue.component("MyArtworkView", {
                                 <div class="card">
                                     <div class="card-body">
                                         <img src="./assets/images/artworks/artwork1.jpg">
-                                        <h4>{{ item['작품정보']['이름'] }}</h4>
+                                        <h4>{{ item['explanation']['name'] }}</h4>
                                         <span class="badge badge-success">경매 진행중</span>
                                         <router-link :to="{ name: 'auction.detail', params: { id: item['id'] }}" class="btn btn-block btn-secondary mt-3">자세히보기</router-link>
                                     </div>
@@ -113,5 +113,23 @@ var myArtworkView = Vue.component("MyArtworkView", {
      * 경매 중인 작품 마다 소유권 이력을 보여줄 수 있어야 합니다.
      */
     // 여기에 작성하세요.
+    auctionService.findAllByUser(userId,function(data) {
+      var result = data;
+
+            // 각 경매별 작품 정보를 불러온다.
+            function fetchData(start, end){
+                if(start == end) {
+                    scope.auctions = result;
+                    console.log(scope.auctions);
+                } else {
+                    var id = result[start]['auction_item_id'];
+                    workService.findById(id, function(work){
+                        result[start]['explanation'] = work;
+                        fetchData(start+1, end);
+                    });
+                }
+            }
+            fetchData(0, result.length);
+        });
   }
 });

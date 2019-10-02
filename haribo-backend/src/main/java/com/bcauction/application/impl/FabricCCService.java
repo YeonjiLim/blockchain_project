@@ -3,6 +3,7 @@ package com.bcauction.application.impl;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CompletableFuture;
@@ -14,13 +15,10 @@ import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
-import org.hyperledger.fabric.protos.common.Common.Block;
 import org.hyperledger.fabric.sdk.BlockEvent;
-import org.hyperledger.fabric.sdk.BlockListener;
 import org.hyperledger.fabric.sdk.ChaincodeID;
 import org.hyperledger.fabric.sdk.Channel;
 import org.hyperledger.fabric.sdk.Enrollment;
-import org.hyperledger.fabric.sdk.EventHub;
 import org.hyperledger.fabric.sdk.HFClient;
 import org.hyperledger.fabric.sdk.Orderer;
 import org.hyperledger.fabric.sdk.Peer;
@@ -34,17 +32,12 @@ import org.hyperledger.fabric_ca.sdk.HFCAClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.bcauction.application.IFabricCCService;
 import com.bcauction.domain.CommonUtil;
 import com.bcauction.domain.FabricAsset;
 import com.bcauction.domain.FabricUser;
-import com.fasterxml.jackson.databind.annotation.JsonAppend.Prop;
-
-import io.reactivex.Completable;
 @Service
 public class FabricCCService implements IFabricCCService
 {
@@ -394,22 +387,37 @@ public class FabricCCService implements IFabricCCService
 
 		// Query the chaincode  
 		Collection<ProposalResponse> queryResponse = null;
+		List<FabricAsset> list=new ArrayList<>();
 		try {
 			queryResponse = channel.queryByChaincode(queryRequest);
+			JsonObject o=null;
+			for (ProposalResponse pres : queryResponse) {
+				String s;
+				try {
+					s = new String(pres.getChaincodeActionResponsePayload());
+					s=s.substring(1, s.length()-1);
+					System.out.println(s);
+					String []sp=s.split("},");
+					for (int i = 0; i <sp.length; i++) {
+						System.out.println(sp[i]+"BBB");
+						JsonReader reader = Json.createReader(new StringReader(sp[i]));
+						o = reader.readObject();
+						FabricAsset fa= getAssetRecord(o);
+						System.out.println(fa+"AAA");
+						list.add(fa);						
+					}
+				} catch (InvalidArgumentException e) {
+					e.printStackTrace();
+				} 
+			}
+			for (int i = 0; i < list.size(); i++) {
+				System.out.println(list.get(i));
+			}
 		} catch (InvalidArgumentException | ProposalException e) {
 			e.printStackTrace();
 		}
-		for (ProposalResponse pres : queryResponse) {
-		 // process the response here
-			//System.out.println(pres.get);
-			//private String assetId;
-			//private String owner;
-			//private LocalDateTime createdAt;
-			//private LocalDateTime expiredAt;
 
-		}
-		
-		return null;
+		return list;
 	}
 	
 

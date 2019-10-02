@@ -54,8 +54,10 @@ var explorerAuctionView = Vue.component("ExplorerView", {
     exploreService.findAllAuction(function(data){
         for (let index = 0; index < data.length; index++) {
             scope.contracts.push(data[index].contract_address)
+            var HighestBid = Number(data[index].highest_bid).toLocaleString().split(",").join("")
+            data[index].highest_bid = web3.utils.fromWei(HighestBid, 'ether');;
         }
-        scope.items = data;
+        scope.items = data
         console.log(scope.contracts)
     })
 

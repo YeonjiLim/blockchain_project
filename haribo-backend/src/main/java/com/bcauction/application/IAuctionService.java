@@ -12,7 +12,7 @@ public interface IAuctionService
 	List<Auction> searchAuctionList();
 	Auction search(long auction_id);
 	Auction search(String contract_address);
-
+	List<Auction> searchByOwner(long id);
 	@Transactional
 	Auction create(Auction auction);
 
