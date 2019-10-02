@@ -8,12 +8,12 @@ var explorerBlockDetailView = Vue.component("ExplorerBlockDetailView", {
             <div class="row">
                 <div class="col-md-12">
                 <div class="card shadow-sm">
-                    <div class="card-header">블록 <strong># {{ block.number }}</strong></div>
+                    <div class="card-header">블록 <strong># {{ block.blockNo }}</strong></div>
                     <table class="table">
                         <tbody>
                             <tr>
                                 <th width="300">블록 height</th>
-                                <td>{{ block.number }}</td>
+                                <td>{{ block.blockNo }}</td>
                             </tr>
                             <tr>
                                 <th>블록 해시</th>
@@ -59,18 +59,23 @@ var explorerBlockDetailView = Vue.component("ExplorerBlockDetailView", {
     return {
       isValid: true,
       block: {
-        number: 0
+        blockNo: 0
       }
     };
   },
   mounted: function() {
     // TODO
-    var blockNumber; // 조회할 블록 번호를 초기화 합니다.
+    var scope = this;
+    var blockNumber = scope.$route.params.blockNumber; // 조회할 블록 번호를 초기화 합니다.
 
     if (blockNumber) {
       /**
        * 블록 번호로 블록 정보를 가져옵니다.
        */
+      exploreService.searchBlockByNumber(blockNumber, function(data){
+        console.log(data);
+        scope.block = data;
+      })
     } else {
       this.isValid = false;
     }

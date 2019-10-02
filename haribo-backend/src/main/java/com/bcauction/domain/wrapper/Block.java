@@ -19,10 +19,12 @@ public class Block {
     private String hash;
     private String parentHash;
     private String miner;
+    private BigInteger nonce;
 
-    public static Block fromOriginalBlock(final EthBlock.Block currentBlock) {
+
+	public static Block fromOriginalBlock(final EthBlock.Block currentBlock) {
         Block block = new Block();
-
+        
         block.blockNo = currentBlock.getNumber();
         block.timestamp = LocalDateTime.ofInstant(Instant.ofEpochSecond(currentBlock.getTimestamp().longValue()), TimeZone.getDefault().toZoneId());
         block.difficulty = String.valueOf(currentBlock.getDifficulty());
@@ -33,6 +35,7 @@ public class Block {
         block.hash = currentBlock.getHash();
         block.parentHash = currentBlock.getParentHash();
         block.miner = currentBlock.getMiner();
+        block.nonce = currentBlock.getNonce();
 
         return block;
     }
@@ -122,4 +125,12 @@ public class Block {
     {
         this.miner = miner;
     }
+
+    public BigInteger getNonce() {
+		return nonce;
+	}
+
+	public void setNonce(BigInteger nonce) {
+		this.nonce = nonce;
+	}
 }

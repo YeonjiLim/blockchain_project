@@ -2,7 +2,11 @@ package com.bcauction.application.impl;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
@@ -19,6 +23,7 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.DefaultBlockParameterNumber;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
@@ -30,6 +35,7 @@ import org.web3j.utils.Numeric;
 import com.bcauction.application.IEthereumService;
 import com.bcauction.domain.Address;
 import com.bcauction.domain.CommonUtil;
+import com.bcauction.domain.Transaction;
 import com.bcauction.domain.exception.ApplicationException;
 import com.bcauction.domain.repository.ITransactionRepository;
 import com.bcauction.domain.wrapper.Block;
@@ -83,9 +89,15 @@ public class EthereumService implements IEthereumService {
 	public List<Block> searchCurrentBlock()
 	{
 		// TODO
-		List<Block> blk;
-		
-		return null;
+		List<Block> blk = new ArrayList<>();
+		BigInteger latestBlockNumber = currentBlock(false).getNumber();
+		int subValue = 0;
+		for(int index = 0; index < 20; index++) {
+			BigInteger sub = new BigInteger(String.valueOf(subValue));
+			blk.add(searchBlock(String.valueOf(latestBlockNumber.subtract(sub))));
+			subValue++;
+		}
+		return blk;
 	}
 
 	/**
@@ -110,7 +122,24 @@ public class EthereumService implements IEthereumService {
 	public Block searchBlock(String block_number)
 	{
 		// TODO
-		return null;
+		Block block = new Block();
+		try {
+			EthBlock ethBlock = web3j.ethGetBlockByNumber(new DefaultBlockParameterNumber(new BigInteger(block_number)), false).send();
+			block.setBlockNo(ethBlock.getBlock().getNumber());
+			block.setDifficulty(String.valueOf(ethBlock.getBlock().getDifficulty()));
+			block.setGasLimit(ethBlock.getBlock().getGasLimit());
+			block.setGasUsed(ethBlock.getBlock().getGasUsed());
+			block.setHash(ethBlock.getBlock().getHash());
+			block.setMiner(ethBlock.getBlock().getMiner());
+			block.setParentHash(ethBlock.getBlock().getParentHash());
+			block.setSize(ethBlock.getBlock().getSize());
+			block.setTimestamp(LocalDateTime.ofInstant(Instant.ofEpochSecond(ethBlock.getBlock().getTimestamp().longValue()), TimeZone.getDefault().toZoneId()));
+			block.setTrans(EthereumTransaction.getEthereumTransactionList(ethBlock.getBlock().getTransactions(), ethBlock.getBlock().getTimestamp(), true));
+			block.setNonce(ethBlock.getBlock().getNonce());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return block;
 	}
 
 	/**
