@@ -14,11 +14,11 @@ var explorerBlockView = Vue.component("ExplorerBlockView", {
                                 <div class="row block-info" v-for="item in blocks">
                                     <div class="col-md-2">BK</div>
                                     <div class="col-md-4">
-                                        <router-link :to="{name:'explorer.block.detail', params: {blockNumber:item.number}}" class="block-number">{{ item.number }}</router-link>
+                                        <router-link :to="{name:'explorer.block.detail', params: {blockNumber:item.blockNo}}" class="block-number">{{ item.blockNo }}</router-link>
                                         <p class="block-timestamp">{{ item.timestamp }}</p>
                                     </div>
                                     <div class="col-md-6 text-right">
-                                        <p class="block-num-transactions">{{ item.txCount }} Txes</p>
+                                        <p class="block-num-transactions">{{ item.trans.length }} Txes</p>
                                     </div>
                                 </div>
                             </div>
@@ -40,7 +40,11 @@ var explorerBlockView = Vue.component("ExplorerBlockView", {
       /**
        * TODO 최근 10개의 블록 정보를 업데이트 합니다.
        */
-      
+      var scope = this;
+      exploreService.searchLatest20Blocks(function(data){
+        scope.blocks = data;
+        console.log(scope.blocks);
+      })
     }
   },
   mounted: function() {

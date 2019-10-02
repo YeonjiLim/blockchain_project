@@ -10,5 +10,11 @@ var exploreService = {
             console.log(data)
             callback(data)
         })
+    },
+    searchLatest20Blocks : function(callback){
+      $.get(API_BASE_URL + "/api/eth/blocks", function(data){
+        console.log(data)
+        callback(data)
+      })
     }
 }
