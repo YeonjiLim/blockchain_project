@@ -2,6 +2,7 @@ package com.bcauction.application.impl;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -19,10 +20,12 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.DefaultBlockParameterNumber;
 import org.web3j.protocol.core.methods.response.EthBlock;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
@@ -102,10 +105,8 @@ public class EthereumService implements IEthereumService {
 		if(t.size()==0) {
 			System.out.println("트랜잭션이 존재하지 않습니다.");
 		}
-		for(int i=0;i<t.size();i++) {
-			System.out.println("----------------------------------------------------------");
-			System.out.println(t);
-		}
+		
+		
 		return null;
 	}
 
@@ -128,11 +129,37 @@ public class EthereumService implements IEthereumService {
 	 * @param 트랜잭션Hash
 	 * @return EthereumTransaction
 	 */
+//    private String txHash;
+//    private String Status;
+//    private String blockId;
+//    private LocalDateTime timestamp;
+//    private String from;
+//    private String to;
+//    private BigInteger amount;
+//    private boolean accepted;
 	@Override
 	public EthereumTransaction searchTransaction(String transaction_hash)
 	{
 		// TODO
-		return null;
+		Transaction transaction = new Transaction();
+        try {
+            EthTransaction ethTransaction = web3j.ethGetTransactionByHash(transaction_hash).send();
+            System.out.println("이더리움 트랜잭션 정보입니다."+ethTransaction.getTransaction());
+            
+//            block.setBlockNo(ethBlock.getBlock().getNumber());
+//            block.setDifficulty(String.valueOf(ethBlock.getBlock().getDifficulty()));
+//            block.setGasLimit(ethBlock.getBlock().getGasLimit());
+//            block.setGasUsed(ethBlock.getBlock().getGasUsed());
+//            block.setHash(ethBlock.getBlock().getHash());
+//            block.setMiner(ethBlock.getBlock().getMiner());
+//            block.setParentHash(ethBlock.getBlock().getParentHash());
+//            block.setSize(ethBlock.getBlock().getSize());
+//            block.setTimestamp(LocalDateTime.ofInstant(Instant.ofEpochSecond(ethBlock.getBlock().getTimestamp().longValue()), TimeZone.getDefault().toZoneId()));
+//            block.setTrans(EthereumTransaction.getEthereumTransactionList(ethBlock.getBlock().getTransactions(), ethBlock.getBlock().getTimestamp(), true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return transaction;
 	}
 
 	/**
