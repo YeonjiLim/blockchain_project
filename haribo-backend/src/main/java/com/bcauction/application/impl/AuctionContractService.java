@@ -72,17 +72,14 @@ public class AuctionContractService implements IAuctionContractService {
 	public AuctionInfo searchAuctionInfo(final String contract_address)
 	{
 		// TODO
-		System.out.println("컨트랙트 어드래스 : "+contract_address);
+//		System.out.println("컨트랙트 어드래스 : "+contract_address);
 		try {
 			credentials = CommonUtil.getCredential(WALLET_RESOURCE, PASSWORD);
 			auctionContract = AuctionContract.load(contract_address, web3j, credentials, contractGasProvider);
 			Tuple7 t7 = auctionContract.getAuctionInfo().send();
-			log.info("t7", t7.toString());
 			String wallet_owner = auctionContract.highestBidder().send();
 			//auctionContract.bid
-			System.out.println("입찰자당:  "+wallet_owner);
 			if(wallet_owner.equals("0x0000000000000000000000000000000000000000")) {
-				System.out.println("입찰자가 없는걸?");
 				wallet_owner ="0";
 			}else {
 				wallet_owner = String.valueOf(walletRepository.search(wallet_owner).getOwner_id());
@@ -129,8 +126,6 @@ public class AuctionContractService implements IAuctionContractService {
 	@Override
 	public List<String> auctionContractAddressList()
 	{
-		System.out.println("일단 여기임!!!");
-		System.out.println(AUCTION_FACTORY_CONTRACT);
 		credentials = CommonUtil.getCredential(WALLET_RESOURCE, PASSWORD);
 		auctionFactoryContract = AuctionFactoryContract.load(
 				AUCTION_FACTORY_CONTRACT, web3j, credentials, contractGasProvider);
