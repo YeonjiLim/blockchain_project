@@ -8,16 +8,16 @@ var explorerTxDetailView = Vue.component("ExplorerTxDetailView", {
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card shadow-sm">
-                            <div class="card-header"><strong>{{ tx.hash }}</strong></div>
+                            <div class="card-header"><strong>{{ tx.txHash }}</strong></div>
                             <table class="table">
                                 <tbody>
                                     <tr>
                                         <th width="200">트랜잭션 해시</th>
-                                        <td>{{ tx.hash }}</td>
+                                        <td>{{ tx.txHash }}</td>
                                     </tr>
                                     <tr>
                                         <th>블록 넘버</th>
-                                        <td>{{ tx.block }}</td>
+                                        <td>{{ tx.blockId }}</td>
                                     </tr>
                                     <tr>
                                         <th>날짜</th>
@@ -37,11 +37,11 @@ var explorerTxDetailView = Vue.component("ExplorerTxDetailView", {
                                     </tr>
                                     <tr>
                                         <th>Gas</th>
-                                        <td>{{ tx.gas }}</td>
+                                        <td>{{ tx.amount }}</td>
                                     </tr>
                                     <tr>
                                         <th>Gas Price</th>
-                                        <td>{{ tx.gasPrice }}</td>
+                                        <td>{{ tx.amount[0] }}</td>
                                     </tr>
                                     <tr>
                                         <th>Input Data</th>
@@ -62,7 +62,7 @@ var explorerTxDetailView = Vue.component("ExplorerTxDetailView", {
       isValid: true,
       tx: {
         hash: "-",
-        timestamp: "-"
+        timestamp: "--"
       }
     };
   },
@@ -70,12 +70,17 @@ var explorerTxDetailView = Vue.component("ExplorerTxDetailView", {
     /**
      *  TODO 트랜잭션 해시로 트랜잭션 상세 정보를 조회합니다.
      */
-    var hash; // 조회할 트랜잭션 해시를 초기화합니다.
+    var scope = this;
+    var hash = scope.$route.params.hash; // 조회할 트랜잭션 해시를 초기화합니다.
 
     if (hash) {
       /**
        * 트랜잭션 해시값으로 트랜잭션 정보를 가져옵니다.
        */
+      exploreService.searchBlockByHash(hash, function(data){
+        console.log(data);
+        scope.tx = data;
+      })
     } else {
       this.isValid = false;
     }

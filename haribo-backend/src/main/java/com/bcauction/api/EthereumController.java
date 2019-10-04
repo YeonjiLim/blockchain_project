@@ -58,11 +58,11 @@ public class EthereumController {
     @GetMapping("/trans")
     public List<EthereumTransaction> searchCurrentTransaction()
     {
+    	System.out.println("EthereumController 진입");
         List<EthereumTransaction> list = this.explorerService.searchCurrentTransaction();
-
         if (list == null || list.isEmpty() )
             throw new EmptyListException("NO DATA");
-
+        
         return list;
     }
 
@@ -79,9 +79,10 @@ public class EthereumController {
 
     @GetMapping("/trans/{id}")
     public EthereumTransaction searchTransaction(@PathVariable String id)
-    {
+    { 	
+    	System.out.println(id + " 넘어옴----------------------------------------");
         EthereumTransaction transaction = this.explorerService.searchTransaction(id);
-
+        System.out.println(transaction.toString());
         if (transaction == null)
             throw new NotFoundException(id + " transaction 정보를 찾을 수 없습니다.");
 
@@ -102,7 +103,7 @@ public class EthereumController {
     @GetMapping("/auctions")
     public List<AuctionInfo> auctionContractAddressList(){
         List<String> auction_list = this.auctionContractService.auctionContractAddressList();
-        System.out.println(auction_list.size());
+//        System.out.println(auction_list.size());
         if(auction_list == null || auction_list.isEmpty())
             throw new EmptyListException("NO DATA");
 
@@ -123,7 +124,7 @@ public class EthereumController {
     public AuctionInfo searchAuctionInfo(@PathVariable String addr){
         AuctionInfo auction_info = this.auctionContractService.searchAuctionInfo(addr);
         if(auction_info == null)
-            throw new NotFoundException(addr + " auction 정보를 찾을 수 없습니다.");
+            throw new NotFoundException(addr + " auction 정보를 찾을 수 없습니다.!!");
         System.out.println(auction_info);
         return auction_info;
     }
