@@ -51,7 +51,7 @@ public class EthereumTransaction {
 
     public static EthereumTransaction convertTransaction(Transaction transaction){
         EthereumTransaction tx = new EthereumTransaction();
-
+        
         tx.txHash = transaction.getHash();
         tx.blockId = String.valueOf(transaction.getBlockNumber());
         tx.from = transaction.getFrom();
@@ -137,4 +137,11 @@ public class EthereumTransaction {
     public void setTo(String to) {
         this.to = to;
     }
+
+	@Override
+	public String toString() {
+		return "EthereumTransaction [txHash=" + txHash + ", Status=" + Status + ", blockId=" + blockId + ", timestamp="
+				+ timestamp + ", from=" + from + ", to=" + to + ", amount=" + amount + ", accepted=" + accepted + "]";
+	}
+    
 }
