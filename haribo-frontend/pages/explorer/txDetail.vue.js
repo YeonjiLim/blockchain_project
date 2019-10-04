@@ -62,7 +62,7 @@ var explorerTxDetailView = Vue.component("ExplorerTxDetailView", {
       isValid: true,
       tx: {
         hash: "-",
-        timestamp: "-"
+        timestamp: "--"
       }
     };
   },
