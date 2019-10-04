@@ -2,7 +2,12 @@ package com.bcauction.application.impl;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
@@ -19,10 +24,14 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.admin.methods.response.PersonalUnlockAccount;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.DefaultBlockParameterNumber;
+import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthBlock;
+import org.web3j.protocol.core.methods.response.EthBlock.TransactionResult;
 import org.web3j.protocol.core.methods.response.EthGetBalance;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.EthTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
@@ -30,6 +39,7 @@ import org.web3j.utils.Numeric;
 import com.bcauction.application.IEthereumService;
 import com.bcauction.domain.Address;
 import com.bcauction.domain.CommonUtil;
+import com.bcauction.domain.Transaction;
 import com.bcauction.domain.exception.ApplicationException;
 import com.bcauction.domain.repository.ITransactionRepository;
 import com.bcauction.domain.wrapper.Block;
@@ -83,9 +93,15 @@ public class EthereumService implements IEthereumService {
 	public List<Block> searchCurrentBlock()
 	{
 		// TODO
-		List<Block> blk;
-		
-		return null;
+		List<Block> blk = new ArrayList<>();
+		BigInteger latestBlockNumber = currentBlock(false).getNumber();
+		int subValue = 0;
+		for(int index = 0; index < 20; index++) {
+			BigInteger sub = new BigInteger(String.valueOf(subValue));
+			blk.add(searchBlock(String.valueOf(latestBlockNumber.subtract(sub))));
+			subValue++;
+		}
+		return blk;
 	}
 
 	/**
@@ -96,8 +112,24 @@ public class EthereumService implements IEthereumService {
 	@Override
 	public List<EthereumTransaction> searchCurrentTransaction()
 	{
-		// TODO
-		return null;
+		List<EthereumTransaction> trans_list=new ArrayList<>();
+		try {
+			latestBlockResponse
+					= web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, true).sendAsync().get();
+			// 최근 블럭을 찾아서
+			
+			trans = latestBlockResponse.getBlock().getTransactions();
+			System.out.println(trans);
+//			for (int i = 0; i < trans.size(); i++) {
+//				trans_list.add(EthereumTransaction.convertTransaction(trans.get(i));
+//			}
+			return trans_list;
+			
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return trans_list;
 	}
 
 	/**
@@ -110,7 +142,16 @@ public class EthereumService implements IEthereumService {
 	public Block searchBlock(String block_number)
 	{
 		// TODO
-		return null;
+		Block block=null;
+		try {
+			latestBlockResponse
+					= web3j.ethGetBlockByNumber(DefaultBlockParameterName.valueOf(block_number), true).sendAsync().get();
+			return block.fromOriginalBlock(latestBlockResponse.getBlock());
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return block;
 	}
 
 	/**
@@ -122,8 +163,17 @@ public class EthereumService implements IEthereumService {
 	@Override
 	public EthereumTransaction searchTransaction(String transaction_hash)
 	{
-		// TODO
-		return null;
+		try {
+			latestBlockResponse
+			= web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, true).sendAsync().get();
+			latestTransResponse
+					= web3j.ethGetTransactionByHash(transaction_hash);
+			return trans.convertTransaction(latestTransResponse);
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return trans;
 	}
 
 	/**
@@ -157,7 +207,7 @@ public class EthereumService implements IEthereumService {
            if (personalUnlockAccount.accountUnlocked()) {
                System.out.println("해제됨");
            }
-           System.out.println(ADMIN_WALLET_FILE);
+           //System.out.println(ADMIN_WALLET_FILE);
            Credentials credentials1 =CommonUtil.getCredential(ADMIN_WALLET_FILE, PASSWORD);
            EthGetTransactionCount ethGetTransactionCount = _web3j.ethGetTransactionCount(
                    ADMIN_ADDRESS, DefaultBlockParameterName.LATEST).sendAsync().get();

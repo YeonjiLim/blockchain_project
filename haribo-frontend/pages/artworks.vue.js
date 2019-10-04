@@ -60,6 +60,7 @@ var artworksView = Vue.component("artworksView", {
 
     workService.findAll(function(data) {
       scope.artworks = data;
+      console.log(data)
     });
   }
 });

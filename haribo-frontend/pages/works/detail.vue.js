@@ -111,6 +111,7 @@ var worksDetailView = Vue.component("WorkDetailView", {
 
     // 작품 상세 정보 조회
     workService.findById(workId, function(data) {
+
       scope.work.id = workId;
       scope.work.name = data["name"];
       scope.work.description = data["explanation"];
@@ -127,6 +128,7 @@ var worksDetailView = Vue.component("WorkDetailView", {
 
     // 작품 이력 조회
     workService.findHistoryById(workId, function(data) {
+      console.log(data);
       scope.history = data;
     });
   }

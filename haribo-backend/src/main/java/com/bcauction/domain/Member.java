@@ -50,4 +50,11 @@ public class Member {
     {
         this.password = password;
     }
+
+	@Override
+	public String toString() {
+		return "Member [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password
+				+ ", registration_date=" + registration_date + "]";
+	}
+    
 }

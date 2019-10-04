@@ -108,7 +108,7 @@ public class WalletService implements IWalletService
 	@Override
 	public Wallet charge(String wallet_address) {
 		Wallet wallet = this.search_ETHBalanceSync(wallet_address);
-		System.out.print("---------------------wallet------------들어옴------------\n");
+		// System.out.print("---------------------wallet------------들어옴------------\n");
 		if (wallet == null || !wallet.canCharge()) {
 			throw new ApplicationException("[1] 충전할 수 없습니다!");
 		}

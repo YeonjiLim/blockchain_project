@@ -207,4 +207,14 @@ public class Transaction {
     public void setSave_date(LocalDateTime save_date) {
         this.save_date = save_date;
     }
+
+	@Override
+	public String toString() {
+		return "Transaction [id=" + id + ", hash=" + hash + ", nonce=" + nonce + ", blockHash=" + blockHash
+				+ ", blockNumber=" + blockNumber + ", transactionIndex=" + transactionIndex + ", from=" + from + ", to="
+				+ to + ", value=" + value + ", gasPrice=" + gasPrice + ", gas=" + gas + ", input=" + input
+				+ ", creates=" + creates + ", publicKey=" + publicKey + ", raw=" + raw + ", r=" + r + ", s=" + s
+				+ ", v=" + v + ", save_date=" + save_date + "]";
+	}
+    
 }

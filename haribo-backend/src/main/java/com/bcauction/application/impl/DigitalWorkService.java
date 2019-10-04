@@ -60,7 +60,7 @@ public class DigitalWorkService implements IDigitalWorkService
 		// TODO.
 		digitalWorkRepository.add(item);
 		DigitalWork dw=digitalWorkRepository.search(item.getMember_id(),item.getName());
-		System.out.println(dw+"확인용");
+		//System.out.println(dw+"확인용");
 		fabricService.registerPossession(dw.getMember_id(), dw.getId());
 		return dw;
 	}

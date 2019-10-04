@@ -54,6 +54,7 @@ public class DigitalWorkController
 	@RequestMapping(value = "/works/{id}", method = RequestMethod.GET)
 	public DigitalWork search(@PathVariable int id) {
 		DigitalWork item = digitalWorkService.search(id);
+		System.out.println("아이템이 들어왔니?? --> " + item);
 		if (item == null) {
 			logger.error("NOT FOUND ID: ", id);
 			throw new NotFoundException(id + " 작품 정보를 찾을 수 없습니다.");
@@ -106,6 +107,7 @@ public class DigitalWorkController
 	 * mission. 3
 	 * Req. 1-2
 	 */
+	@RequestMapping(value = "/works/history/{id}", method = RequestMethod.GET)
 	public List<FabricAsset> searchItemHistory(@PathVariable int id){
 		List<FabricAsset> history = this.fabricService.searchItemHistory(id);
 		if(history == null || history.isEmpty())

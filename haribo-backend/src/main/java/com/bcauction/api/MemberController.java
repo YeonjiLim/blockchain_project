@@ -39,8 +39,10 @@ public class MemberController {
 
     @RequestMapping(value = "/members/{id}", method = RequestMethod.GET)
     public Member search(@PathVariable int id) {
-
+    	
+    	System.out.println("아이디 값이 들어왔니?? --> " + id);
         Member member = memberService.search(id);
+        System.out.println("멤버 들어왔니?? --> " + member);
         if (member == null) {
             logger.error("NOT FOUND ID: ", id);
             throw new NotFoundException(id + " member 정보를 찾을 수 없습니다.");

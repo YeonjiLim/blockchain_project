@@ -520,7 +520,7 @@ function createAuction(options, walletAddress, privateKey, onConfirm){
     .then(function(res){
         console.log(res);
         web3.eth.sendSignedTransaction(res.rawTransaction).on("receipt" , receipt =>{
-            console.log(receipt);
+            console.log(1,receipt);
             var newaddress = web3.eth.abi.decodeParameters(['address','uint256','uint256','uint256','uint256','uint256'], receipt.logs[0].data);
             // console.log(newaddress);
             onConfirm(newaddress);
@@ -540,7 +540,37 @@ function createAuction(options, walletAddress, privateKey, onConfirm){
  *  */
 
 function auction_bid(options, onConfirm) {
-  options.contractAddress;
+    var web3 = createWeb3();
+   // console.log(web3);
+    var contract =createAuctionContract(web3, options.contractAddress);
+    var createAuctionCall = contract.methods.bid();
+
+//    console.log(createAuctionCall);
+
+    
+   // var encodedABI = createAuctionCall.encodeABI();
+    
+   // console.log(walletAddress)
+   var encodedABI = createAuctionCall.encodeABI();
+   var tx = {
+       from: options.walletAddress,
+       to: options.contractAddress,
+       gas: web3.utils.toHex('2000000'),
+       value:web3.utils.toWei(options.amount, 'ether'),
+       data:encodedABI
+   }
+    web3.eth.accounts.signTransaction(tx, options.privateKey)
+    .then(function(res){
+        web3.eth.sendSignedTransaction(res.rawTransaction).on("receipt" , receipt =>{
+            
+            onConfirm(receipt);
+            //console.log(receipt);
+            //var newaddress = web3.eth.abi.decodeParameters(['address','uint256','uint256','uint256','uint256','uint256'], receipt.logs[0].data);
+            // console.log(newaddress);
+            //onConfirm(newaddress);
+        })
+    })
+    return null;
 }
 
 /**
@@ -549,7 +579,25 @@ function auction_bid(options, onConfirm) {
  * 경매 컨트랙트 주소: options.contractAddress
  *  */
 
-function auction_close(options, onConfirm) {}
+function auction_close(options, onConfirm) {
+    var web3 = createWeb3();
+     var contract =createAuctionContract(web3, options.contractAddress);
+     var createAuctionCall = contract.methods.endAuction();
+     var encodedABI = createAuctionCall.encodeABI();
+     var tx = {
+        from: options.walletAddress,
+        to: options.contractAddress,
+        gas: web3.utils.toHex('2000000'),
+        data: encodedABI
+    }
+    web3.eth.accounts.signTransaction(tx, options.privateKey)
+    .then(function(res){
+        web3.eth.sendSignedTransaction(res.rawTransaction).on("receipt" , receipt =>{
+            onConfirm(receipt);
+        })
+    })
+    return null;
+}
 
 /**
  * TODO [경매 취소]
@@ -557,4 +605,25 @@ function auction_close(options, onConfirm) {}
  * 경매 컨트랙트 주소: options.contractAddress
  *  */
 
-function auction_cancel(options, onConfirm) {}
+function auction_cancel(options, onConfirm) {
+    var web3 = createWeb3();
+
+    console.log("AAA"+options.contractAddress);
+     var contract =createAuctionContract(web3, options.contractAddress);
+     var createAuctionCall = contract.methods.cancelAuction();
+     console.log(createAuctionCall);
+     var encodedABI = createAuctionCall.encodeABI();
+     var tx = {
+        from: options.walletAddress,
+        to: options.contractAddress,
+        gas: web3.utils.toHex('2000000'),
+        data: encodedABI
+    }
+    web3.eth.accounts.signTransaction(tx, options.privateKey)
+    .then(function(res){
+        web3.eth.sendSignedTransaction(res.rawTransaction).on("receipt" , receipt =>{
+            onConfirm(receipt);
+        })
+    })
+    return null;
+}

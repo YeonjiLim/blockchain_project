@@ -1,26 +1,17 @@
 package com.bcauction.application.impl;
 
-import java.io.Console;
-import java.io.File;
-import java.io.IOException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import org.hyperledger.fabric.sdk.BlockInfo.TransactionEnvelopeInfo.TransactionActionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.RemoteCall;
-import org.web3j.protocol.core.methods.response.TransactionReceipt;
-import org.web3j.tx.RawTransactionManager;
-import org.web3j.tx.TransactionManager;
+import org.web3j.tuples.generated.Tuple7;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.DefaultGasProvider;
 
@@ -77,19 +68,25 @@ public class AuctionContractService implements IAuctionContractService {
 	 * 2. info의 highestBidder의 정보를 가지고 최고입찰자 회원의 id를 찾아
 	 * 3. AuctionInfo의 인스턴스를 생성하여 반환한다.
 	 * */
-	@SuppressWarnings("deprecation")
 	@Override
 	public AuctionInfo searchAuctionInfo(final String contract_address)
 	{
 		// TODO
-		System.out.println("컨트랙트 어드래스 : "+contract_address);
+//		System.out.println("컨트랙트 어드래스 : "+contract_address);
 		try {
 			credentials = CommonUtil.getCredential(WALLET_RESOURCE, PASSWORD);
-			auctionFactoryContract = AuctionFactoryContract.load(AUCTION_FACTORY_CONTRACT, web3j, credentials, contractGasProvider);
 			auctionContract = AuctionContract.load(contract_address, web3j, credentials, contractGasProvider);
-			BigInteger minValue;
-			minValue = auctionContract.minValue().send();
-			log.info("minValue", minValue);
+			Tuple7 t7 = auctionContract.getAuctionInfo().send();
+			String wallet_owner = auctionContract.highestBidder().send();
+			//auctionContract.bid
+			if(wallet_owner.equals("0x0000000000000000000000000000000000000000")) {
+				wallet_owner ="0";
+			}else {
+				wallet_owner = String.valueOf(walletRepository.search(wallet_owner).getOwner_id());
+			}
+//			System.out.println(Long.parseLong(wallet_owner));
+			AuctionInfo auctioninfo = AuctionInfoFactory.creation(contract_address, Long.parseLong(wallet_owner) , t7);
+			return auctioninfo;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -129,7 +126,17 @@ public class AuctionContractService implements IAuctionContractService {
 	@Override
 	public List<String> auctionContractAddressList()
 	{
-		// TODO
+		credentials = CommonUtil.getCredential(WALLET_RESOURCE, PASSWORD);
+		auctionFactoryContract = AuctionFactoryContract.load(
+				AUCTION_FACTORY_CONTRACT, web3j, credentials, contractGasProvider);
+		try {
+			List<String> auctionlist = auctionFactoryContract.allAuctions().send();
+			//System.out.println(auctionlist);
+			return auctionlist;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 }

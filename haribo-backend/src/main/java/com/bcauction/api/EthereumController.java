@@ -1,21 +1,28 @@
 package com.bcauction.api;
 
-import com.bcauction.application.IAuctionContractService;
-import com.bcauction.application.IEthereumService;
-import com.bcauction.domain.Address;
-import com.bcauction.domain.AuctionInfo;
-import com.bcauction.domain.wrapper.Block;
-import com.bcauction.domain.wrapper.EthereumTransaction;
-import com.bcauction.domain.exception.EmptyListException;
-import com.bcauction.domain.exception.NotFoundException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.bcauction.application.IAuctionContractService;
+import com.bcauction.application.IEthereumService;
+import com.bcauction.domain.Address;
+import com.bcauction.domain.Auction;
+import com.bcauction.domain.AuctionInfo;
+import com.bcauction.domain.exception.EmptyListException;
+import com.bcauction.domain.exception.NotFoundException;
+import com.bcauction.domain.wrapper.Block;
+import com.bcauction.domain.wrapper.EthereumTransaction;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -52,7 +59,6 @@ public class EthereumController {
     public List<EthereumTransaction> searchCurrentTransaction()
     {
         List<EthereumTransaction> list = this.explorerService.searchCurrentTransaction();
-
         if (list == null || list.isEmpty() )
             throw new EmptyListException("NO DATA");
 
@@ -95,15 +101,19 @@ public class EthereumController {
     @GetMapping("/auctions")
     public List<AuctionInfo> auctionContractAddressList(){
         List<String> auction_list = this.auctionContractService.auctionContractAddressList();
-
+//        System.out.println(auction_list.size());
         if(auction_list == null || auction_list.isEmpty())
             throw new EmptyListException("NO DATA");
 
         List<AuctionInfo> auction_info_list = new ArrayList<>();
-        auction_list.forEach(auction -> {
-            AuctionInfo auction_info = this.auctionContractService.searchAuctionInfo(auction);
+        for (int i = 0; i < 10; i++) {
+        	AuctionInfo auction_info = this.auctionContractService.searchAuctionInfo(auction_list.get(i));
             auction_info_list.add(auction_info);
-        });
+		}
+//        auction_list.forEach(auction -> {
+//            AuctionInfo auction_info = this.auctionContractService.searchAuctionInfo(auction);
+//            auction_info_list.add(auction_info);
+//        });
 
         return auction_info_list;
     }
@@ -113,7 +123,7 @@ public class EthereumController {
         AuctionInfo auction_info = this.auctionContractService.searchAuctionInfo(addr);
         if(auction_info == null)
             throw new NotFoundException(addr + " auction 정보를 찾을 수 없습니다.");
-
+        System.out.println(auction_info);
         return auction_info;
     }
 }
