@@ -112,8 +112,6 @@ public class EthereumService implements IEthereumService {
 	@Override
 	public List<EthereumTransaction> searchCurrentTransaction()
 	{
-		List<Transaction> trans;
-		EthBlock latestBlockResponse;
 		List<EthereumTransaction> trans_list=new ArrayList<>();
 		try {
 			latestBlockResponse
@@ -131,9 +129,6 @@ public class EthereumService implements IEthereumService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
 		return trans_list;
 	}
 
@@ -148,7 +143,6 @@ public class EthereumService implements IEthereumService {
 	{
 		// TODO
 		Block block=null;
-		EthBlock latestBlockResponse;
 		try {
 			latestBlockResponse
 					= web3j.ethGetBlockByNumber(DefaultBlockParameterName.valueOf(block_number), true).sendAsync().get();
@@ -169,11 +163,6 @@ public class EthereumService implements IEthereumService {
 	@Override
 	public EthereumTransaction searchTransaction(String transaction_hash)
 	{
-		// TODO
-		EthereumTransaction trans=null;
-		Request<?, EthTransaction> latestTransResponse;
-		Block block=null;
-		EthBlock latestBlockResponse;
 		try {
 			latestBlockResponse
 			= web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, true).sendAsync().get();

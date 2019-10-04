@@ -59,7 +59,6 @@ public class EthereumController {
     public List<EthereumTransaction> searchCurrentTransaction()
     {
         List<EthereumTransaction> list = this.explorerService.searchCurrentTransaction();
-        System.out.println("success");
         if (list == null || list.isEmpty() )
             throw new EmptyListException("NO DATA");
 
