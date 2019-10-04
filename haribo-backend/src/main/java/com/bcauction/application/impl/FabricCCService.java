@@ -2,6 +2,7 @@ package com.bcauction.application.impl;
 
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -373,6 +374,7 @@ public class FabricCCService implements IFabricCCService
 	 */
 	@Override
 	public List<FabricAsset> queryHistory(final long item_id){
+		System.out.println("!!!!!!!!!!!!!!"+item_id);
 		if(this.hfClient == null || this.channel == null)
 			loadChannel();
 		//getAssetHistory
@@ -398,13 +400,19 @@ public class FabricCCService implements IFabricCCService
 					s=s.substring(1, s.length()-1);
 					System.out.println(s);
 					String []sp=s.split("},");
+					for (int i = 0; i < sp.length; i++) {
+						if(i != sp.length-1) {
+							sp[i] += "}";
+						}
+					}
+					System.out.println(Arrays.toString(sp));
 					for (int i = 0; i <sp.length; i++) {
 						System.out.println(sp[i]+"BBB");
 						JsonReader reader = Json.createReader(new StringReader(sp[i]));
 						o = reader.readObject();
 						FabricAsset fa= getAssetRecord(o);
 						System.out.println(fa+"AAA");
-						list.add(fa);						
+						
 					}
 				} catch (InvalidArgumentException e) {
 					e.printStackTrace();
