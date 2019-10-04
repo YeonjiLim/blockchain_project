@@ -1,0 +1,119 @@
+version: '2'
+services:
+  kafka000:
+    image: hyperledger/fabric-kafka
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION=false
+      #- KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka000:9092
+      # - KAFKA_ADVERTISED_HOST_NAME=kafka000
+      # - KAFKA_ADVERTISED_PORT=9092
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper000:2181,zookeeper001:2182,zookeeper002:2183
+      #- KAFKA_PORT=9092
+    # ports:
+    #   - "9092:9092"
+    #   - "9093:9093"
+    expose:
+      - '9092'
+    #  - '9093'
+    # extra_hosts:
+    #   - "kafka001:0.0.0.0"
+    #   - "kafka002:0.0.0.0"
+    #   - "kafka003:0.0.0.0"      
+    container_name: kafka000
+    hostname: kafka000
+
+  kafka001:
+    image: hyperledger/fabric-kafka
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION=false
+      # - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka001:9102
+      # - KAFKA_ADVERTISED_HOST_NAME=kafka001
+      # - KAFKA_ADVERTISED_PORT=9102
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_BROKER_ID=2
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper000:2181,zookeeper001:2182,zookeeper002:2183
+      # - KAFKA_PORT=9102
+    # ports:
+    #   - "9092:9092"
+    #   - "9093:9093"
+      #- "9102:9092"
+      #- "9103:9093"
+    expose:
+      - '9092'
+      #- '9102'
+      #- '9103'
+    # extra_hosts:
+    #   - "kafka000:0.0.0.0"
+    #   - "kafka002:0.0.0.0"
+    #   - "kafka003:0.0.0.0"
+    container_name: kafka001
+    hostname: kafka001
+
+
+  kafka002:
+    image: hyperledger/fabric-kafka
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION=false
+      # - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka002:9112
+      # - KAFKA_ADVERTISED_HOST_NAME=kafka002
+      # - KAFKA_ADVERTISED_PORT=9112
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_BROKER_ID=3
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper000:2181,zookeeper001:2182,zookeeper002:2183
+      - KAFKA_PORT=9112
+    # ports:
+    #   - "9092:9092"
+    #   - "9093:9093"
+     # - "9112:9092"
+     # - "9113:9093"
+    expose:
+      - '9092'
+     # - '9112'
+     # - '9113'
+    # extra_hosts:
+    #   - "kafka000:0.0.0.0"
+    #   - "kafka001:0.0.0.0"
+    #   - "kafka003:0.0.0.0"      
+    container_name: kafka002
+    hostname: kafka002
+      
+  kafka003:
+    image: hyperledger/fabric-kafka
+    environment:
+      - KAFKA_MESSAGE_MAX_BYTES=103809024
+      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+      - KAFKA_UNCLEAN_LEADER_ELECTION=false
+      # - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka003:9122
+      # - KAFKA_ADVERTISED_HOST_NAME=kafka003
+      # - KAFKA_ADVERTISED_PORT=9122
+      - KAFKA_MIN_INSYNC_REPLICAS=2
+      - KAFKA_DEFAULT_REPLICATION_FACTOR=3
+      - KAFKA_BROKER_ID=4
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper000:2181,zookeeper001:2182,zookeeper002:2183
+      # - KAFKA_PORT=9122
+    # ports:
+      # - "9092:9092"
+      # - "9093:9093"
+      # - "9122:9092"
+      # - "9123:9093"
+    expose:
+      - '9092'
+      # - '9122'
+      # - '9123'
+    # extra_hosts:
+    #   - "kafka000:0.0.0.0"
+    #   - "kafka001:0.0.0.0"
+    #   - "kafka002:0.0.0.0"      
+    container_name: kafka003
+    hostname: kafka003

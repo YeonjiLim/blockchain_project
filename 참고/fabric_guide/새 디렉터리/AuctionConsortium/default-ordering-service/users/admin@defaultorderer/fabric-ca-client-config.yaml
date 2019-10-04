@@ -1,0 +1,41 @@
+url: http://0.0.0.0:7054
+mspdir: msp
+tls:
+  certfiles: ~
+  client:
+    certfile: ~
+    keyfile: ~
+csr:
+  cn: admin@defaultorderer
+  keyrequest:
+    algo: ecdsa
+    size: 256
+  serialnumber: ~
+  names:
+    - C: US
+      ST: North Carolina
+      L: ~
+      O: Hyperledger
+      OU: Fabric
+  hosts:
+    - JIWOOs-MacBook-Pro.local
+id:
+  name: orderer003
+  type: orderer
+  affiliation: DefaultOrdererOrg
+  maxenrollments: -1
+  attributes:
+    - name: role
+      value: orderer
+      ecert: true
+enrollment:
+  profile: ~
+  label: ~
+caname: ~
+bccsp:
+  default: SW
+  sw:
+    hash: SHA2
+    security: 256
+    filekeystore:
+      keystore: msp/keystore

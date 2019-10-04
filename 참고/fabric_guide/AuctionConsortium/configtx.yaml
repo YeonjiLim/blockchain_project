@@ -1,0 +1,145 @@
+Capabilities:
+        Global: &ChannelCapabilities
+          V1_3: true
+          V1_1: true
+        Orderer: &OrdererCapabilites
+          V1_1: true
+        Application: &ApplicationCapabilites
+          V1_3: true
+          V1_2: true
+          V1_1: true
+
+Organizations:
+        - &copyrightAssociateOrg
+                Name: copyrightAssociateOrgMSP
+                ID: copyrightAssociateOrgMSP
+                MSPDir: ./copyrightOrg/users/admin@copyrightOrg/msp
+                AnchorPeers:
+                        - Host: peer0.copyrightOrg 
+                          Port: 7051
+                Policies: &copyrightAssociateOrgPolicies
+                        Readers:
+                                Type: Signature
+                                Rule: "OR('copyrightAssociateOrgMSP.member','digitalAuthorOrgMSP.member')"
+                        Writers:
+                                Type: Signature
+                                Rule: "OR('copyrightAssociateOrgMSP.member','digitalAuthorOrgMSP.member')"
+                        Admins:
+                                Type: Signature
+                                Rule: "OR('copyrightAssociateOrgMSP.admin','digitalAuthorOrgMSP.admin')"
+        - &digitalAuthorOrg
+                Name: digitalAuthorOrgMSP
+                ID: digitalAuthorOrgMSP
+                MSPDir: ./digitalAuthorOrg/users/admin@digitalAuthorOrg/msp
+                AnchorPeers:
+                        - Host: peer0.digitalAuthorOrg
+                          Port: 7051
+                Policies: &digitalAuthorOrgPolicies
+                        Readers:
+                                Type: Signature
+                                Rule: "OR('copyrightAssociateOrgMSP.member','digitalAuthorOrgMSP.member')"
+                        Writers:
+                                Type: Signature
+                                Rule: "OR('copyrightAssociateOrgMSP.member','digitalAuthorOrgMSP.member')"
+                        Admins:
+                                Type: Signature
+                                Rule: "OR('copyrightAssociateOrgMSP.admin','digitalAuthorOrgMSP.admin')"
+        - &DefaultOrdererOrg
+                Name: defaultOrdererOrgMSP
+                ID: defaultOrdererOrgMSP
+                MSPDir: ./default-ordering-service/msp
+                Policies: &DefaultOrdererOrgPolicies
+                        Readers:
+                                Type: Signature
+                                Rule: "OR('defaultOrdererOrgMSP.member')"
+                        Writers:
+                                Type: Signature
+                                Rule: "OR('defaultOrdererOrgMSP.member')"
+                        Admins:
+                                Type: Signature
+                                Rule: "OR('defaultOrdererOrgMSP.admin')"
+
+Orderer: &OrdererDefaults
+        OrdererType: kafka
+        Addresses:
+                - orderer001:7050
+                - orderer002:7050
+                - orderer003:7050
+        Policies:
+                Readers:
+                        Type: ImplicitMeta
+                        Rule: "ANY Readers"
+                Writers:
+                        Type: ImplicitMeta
+                        Rule: "ANY Writers"
+                Admins:
+                        Type: ImplicitMeta
+                        Rule: "MAJORITY Admins"
+        BatchTimeout: 1s
+        BatchSize:
+                MaxMessageCount: 30
+                AbsoluteMaxBytes: 99 MB
+                PreferredMaxBytes: 512 KB
+        kafka:
+                Brokers:
+                        - kafka000:9092
+                        - kafka001:9092
+                        - kafka002:9092
+                        - kafka003:9092
+        Capabilities:
+                <<: *OrdererCapabilites
+        Organizations:
+
+Channel: &ChannelDefaults
+        Policies:
+                Readers:
+                        Type: ImplicitMeta
+                        Rule: "ANY Readers"
+                Writers:
+                        Type: ImplicitMeta
+                        Rule: "ANY Writers"
+                Admins:
+                        Type: ImplicitMeta
+                        Rule: "MAJORITY Admins"
+        Capabilities:
+                <<: *ChannelCapabilities
+
+Application: &ApplicationDefaults
+        Policies:
+                Readers:
+                        Type: ImplicitMeta
+                        Rule: "ANY Readers"
+                Writers:
+                        Type: ImplicitMeta
+                        Rule: "ANY Writers"
+                Admins:
+                        Type: ImplicitMeta
+                        Rule: "MAJORITY Admins"
+        Organizations:
+
+Profiles:
+        AuctionOrdererGenesis:
+                Capabilities:
+                        <<: *ChannelCapabilities
+                <<: *ChannelDefaults
+                Orderer:
+                        <<: *OrdererDefaults
+                        Organizations:
+                                - *DefaultOrdererOrg                                
+                Consortiums:
+                        AuctionConsortium:
+                                Organizations:
+                                        - *copyrightAssociateOrg
+                                        - *digitalAuthorOrg
+        AuctionChannel:
+                Capabilities:
+                        <<: *ChannelCapabilities
+                <<: *ChannelDefaults
+                Consortium: AuctionConsortium
+                Application:
+                        <<: *ApplicationDefaults
+                        Organizations:
+                                - *copyrightAssociateOrg
+                                - *digitalAuthorOrg
+                        Capabilities:
+                                <<: *ApplicationCapabilites

@@ -1,0 +1,83 @@
+version: '2'
+services:
+  orderer001:
+    image: hyperledger/fabric-orderer
+    environment:
+      - FABRIC_LOGGING_SPEC=DEBUG
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=defaultOrdererOrgMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=false
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_FILELEDGER_LOCATION=/var/hyperledger/orderer/ledger
+      - ORDERER_KAFKA_VERSION=1.0.0
+      - ORDERER_KAFKA_VERBOSE=true
+    command: orderer start
+    expose:
+      - '8050'  # 7050 포트 사용 가능 시 8050을 7050으로 변경
+    ports:
+      - "8050:7050" # 7050 포트 사용 가능 시 8050을 7050으로 변경
+    volumes:
+      - "./orderer-genesis.block:/var/hyperledger/orderer/orderer.genesis.block"
+      - "./default-ordering-service/orderer/orderer001/msp/:/var/hyperledger/orderer/msp"
+      - "./default-ordering-service/orderer/orderer001/tls/:/var/hyperledger/orderer/tls"
+      - "./default-ordering-service/orderer/orderer001/ledger:/var/hyperledger/orderer/ledger"
+    container_name: orderer001
+
+  orderer002:
+    image: hyperledger/fabric-orderer
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=defaultOrdererOrgMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=false
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_FILELEDGER_LOCATION=/var/hyperledger/orderer/ledger
+      - ORDERER_KAFKA_VERBOSE=true
+      - ORDERER_KAFKA_VERSION=1.0.0
+    command: orderer start
+    ports:
+      - "7060:7050"
+    volumes:
+      - "./orderer-genesis.block:/var/hyperledger/orderer/orderer.genesis.block"
+      - "./default-ordering-service/orderer/orderer002/msp:/var/hyperledger/orderer/msp"
+      - "./default-ordering-service/orderer/orderer002/tls:/var/hyperledger/orderer/tls"
+      - "./default-ordering-service/orderer/orderer002/ledger:/var/hyperledger/orderer/ledger"
+
+    container_name: orderer002
+
+  orderer003:
+    image: hyperledger/fabric-orderer
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=defaultOrdererOrgMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=false
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_FILELEDGER_LOCATION=/var/hyperledger/orderer/ledger
+      - ORDERER_KAFKA_VERBOSE=true
+      - ORDERER_KAFKA_VERSION=1.0.0
+    command: orderer start
+    ports:
+      - "7070:7050"
+    volumes:
+      - "./orderer-genesis.block:/var/hyperledger/orderer/orderer.genesis.block"
+      - "./default-ordering-service/orderer/orderer003/msp:/var/hyperledger/orderer/msp"
+      - "./default-ordering-service/orderer/orderer003/tls:/var/hyperledger/orderer/tls"
+      - "./default-ordering-service/orderer/orderer003/ledger:/var/hyperledger/orderer/ledger"
+    container_name: orderer003

@@ -1,0 +1,76 @@
+version: '2'
+services:
+  peer0.copyrightOrg:
+    image: hyperledger/fabric-peer
+    container_name: peer0.copyrightOrg
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=auctionconsortium-test001_default # 배포 디렉토리 이름이 바뀔 경우 수정필요
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.copyrightOrg:7052
+      - CORE_PEER_ID=peer0.copyrightOrg
+      - CORE_PEER_ADDRESS=peer0.copyrightOrg:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.copyrightOrg:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.copyrightOrg:7051
+      - CORE_PEER_LOCALMSPID=copyrightAssociateOrgMSP
+      - CORE_PEER_ADDRESSAUTODETECT=false
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/msp      
+      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/var/hyperledger/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/var/hyperledger/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/var/hyperledger/tls/cert.pem
+      - CORE_PEER_FILESYSTEMPATH=/var/hyperledger/peerledger
+    volumes:
+      - "/var/run/:/host/var/run/"
+      - "./chaincode:/var/hyperledger/chaincode/"
+      - "./copyrightOrg/users/admin@copyrightOrg/msp/:/var/hyperledger/users/msp"
+      - "./copyrightOrg/peer0.copyrightOrg/msp:/var/hyperledger/msp"
+      - "./copyrightOrg/peer0.copyrightOrg/tls/:/var/hyperledger/tls"
+      - "./copyrightOrg/peer0.copyrightOrg/ledger:/var/hyperledger/peerledger"
+      - "./channel-artifacts/:/var/hyperledger/production"
+    command: peer node start
+
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  peer0.digitalAuthorOrg:
+    image: hyperledger/fabric-peer
+    container_name: peer0.digitalAuthorOrg
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=auctionconsortium-test001_default # 배포 디렉토리 이름이 바뀔 경우 수정필요
+      - CORE_PEER_CHAINCODELISTENADDRESS=peer0.digitalAuthorOrg:7052
+      - CORE_PEER_ID=peer0.digitalAuthorOrg
+      - CORE_PEER_ADDRESS=peer0.digitalAuthorOrg:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.digitalAuthorOrg:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.digitalAuthorOrg:7051
+      - CORE_PEER_LOCALMSPID=digitalAuthorOrgMSP
+      - CORE_PEER_ADDRESSAUTODETECT=false
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_PROFILE_ENABLED=false
+      - CORE_PEER_MSPCONFIGPATH=/var/hyperledger/msp      
+      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/var/hyperledger/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/var/hyperledger/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/var/hyperledger/tls/cert.pem
+      - CORE_PEER_FILESYSTEMPATH=/var/hyperledger/peerledger
+    volumes:
+      - "/var/run/:/host/var/run/"
+      - "./chaincode:/var/hyperledger/chaincode/"
+      - "./digitalAuthorOrg/users/admin@digitalAuthorOrg/msp/:/var/hyperledger/users/msp"
+      - "./digitalAuthorOrg/peer0.digitalAuthorOrg/msp:/var/hyperledger/msp"
+      - "./digitalAuthorOrg/peer0.digitalAuthorOrg/tls/:/var/hyperledger/tls"
+      - "./digitalAuthorOrg/peer0.digitalAuthorOrg/ledger:/var/hyperledger/peerledger"
+      - "./channel-artifacts/:/var/hyperledger/production"
+    command: peer node start
+    expose:
+      - '8051'
+    ports:
+      - 8051:7051
+      - 8053:7053

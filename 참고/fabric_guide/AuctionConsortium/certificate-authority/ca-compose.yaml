@@ -1,0 +1,15 @@
+version: '2'
+services:
+  ca-service:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=admin
+    expose:
+      - '8054' # 7054 포트 사용 가능 시 변경 (8054 --> 7054)
+    ports:
+      - "8054:7054" # 7054 포트 사용 시 변경 (8054 --> 7054)
+    command: sh -c 'fabric-ca-server start -b admin:adminpw --cfg.affiliations.allowremove --cfg.identities.allowremove -d'
+    volumes:
+      - ./CA_SERVER_HOME:/etc/hyperledger/fabric-ca-server
+    container_name: ca-service

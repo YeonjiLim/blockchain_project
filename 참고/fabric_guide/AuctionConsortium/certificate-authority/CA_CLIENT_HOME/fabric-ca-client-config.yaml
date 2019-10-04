@@ -1,0 +1,55 @@
+url: http://0.0.0.0:7054
+mspdir: msp
+tls:
+  certfiles: ~
+  client:
+    certfile: ~
+    keyfile: ~
+csr:
+  cn: admin
+  keyrequest:
+    algo: ecdsa
+    size: 256
+  serialnumber: ~
+  names:
+    - C: US
+      ST: North Carolina
+      L: ~
+      O: Hyperledger
+      OU: Fabric
+  hosts:
+    - JIWOOs-MacBook-Pro.local
+id:
+  name: admin@defaultorderer
+  type: client
+  affiliation: DefaultOrdererOrg
+  maxenrollments: -1
+  attributes:
+    - name: hf.Registrar.Roles
+      value: client,orderer,peer,user
+    - name: hf.Registrar.DelegateRoles
+      value: client,orderer,peer,user
+    - name: hf.Registrar.Attributes
+      value: "*"
+    - name: hf.GenCRL
+      value: true
+    - name: hf.Revoker
+      value: true
+    - name: hf.AffiliationMgr
+      value: true
+    - name: hf.IntermediateCA
+      value: true
+    - name: role
+      value: admin
+      ecert: true
+enrollment:
+  profile: ~
+  label: ~
+caname: ~
+bccsp:
+  default: SW
+  sw:
+    hash: SHA2
+    security: 256
+    filekeystore:
+      keystore: msp/keystore

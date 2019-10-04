@@ -1,0 +1,37 @@
+version: '2'
+services:
+  zookeeper000:
+    image: hyperledger/fabric-zookeeper:latest
+    environment:
+      - ZOO_MY_ID=1
+      - ZOO_SERVERS=server.1=zookeeper000:2888:3888 server.2=zookeeper001:2988:3988 server.3=zookeeper002:3088:4088
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+    container_name: zookeeper000
+    hostname: zookeeper000
+    
+  zookeeper001:
+    image: hyperledger/fabric-zookeeper:latest
+    environment:
+      - ZOO_MY_ID=2
+      - ZOO_SERVERS=server.1=zookeeper000:2888:3888 server.2=zookeeper001:2988:3988 server.3=zookeeper002:3088:4088
+    ports:
+      - "2182:2181"
+      - "2988:2888"
+      - "3988:3888"
+    container_name: zookeeper001
+    hostname: zookeeper001
+
+  zookeeper002:
+    image: hyperledger/fabric-zookeeper:latest
+    environment:
+      - ZOO_MY_ID=3
+      - ZOO_SERVERS=server.1=zookeeper000:2888:3888 server.2=zookeeper001:2988:3988 server.3=zookeeper002:3088:4088
+    ports:
+      - "2183:2181"
+      - "3088:2888"
+      - "4088:3888"
+    container_name: zookeeper002
+    hostname: zookeeper002
