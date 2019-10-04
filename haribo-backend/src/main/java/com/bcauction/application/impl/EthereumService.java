@@ -114,19 +114,15 @@ public class EthereumService implements IEthereumService {
 	{
 		List<EthereumTransaction> trans_list=new ArrayList<>();
 		try {
-			latestBlockResponse
-					= web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, true).sendAsync().get();
-			// 최근 블럭을 찾아서
-			
-			trans = latestBlockResponse.getBlock().getTransactions();
-			System.out.println(trans);
-//			for (int i = 0; i < trans.size(); i++) {
-//				trans_list.add(EthereumTransaction.convertTransaction(trans.get(i));
-//			}
+			List<EthBlock.TransactionResult> txs = web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, true).send().getBlock().getTransactions();
+			System.out.println(txs.size());
+			txs.forEach(tx -> {
+			  EthBlock.TransactionObject transaction = (EthBlock.TransactionObject) tx.get();
+			  EthereumTransaction txxx = EthereumTransaction.convertTransaction(transaction);
+			  trans_list.add(txxx);
+			});
 			return trans_list;
-			
-		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return trans_list;
@@ -144,13 +140,13 @@ public class EthereumService implements IEthereumService {
 		// TODO
 		Block block=null;
 		try {
-			latestBlockResponse
-					= web3j.ethGetBlockByNumber(DefaultBlockParameterName.valueOf(block_number), true).sendAsync().get();
-			return block.fromOriginalBlock(latestBlockResponse.getBlock());
-		} catch (InterruptedException | ExecutionException e) {
+			EthBlock ethBlock = web3j.ethGetBlockByNumber(new DefaultBlockParameterNumber(new BigInteger(block_number)), false).send();
+			return block.fromOriginalBlock(ethBlock.getBlock());
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return block;
 	}
 
@@ -164,16 +160,17 @@ public class EthereumService implements IEthereumService {
 	public EthereumTransaction searchTransaction(String transaction_hash)
 	{
 		try {
-			latestBlockResponse
-			= web3j.ethGetBlockByNumber(DefaultBlockParameterName.LATEST, true).sendAsync().get();
-			latestTransResponse
-					= web3j.ethGetTransactionByHash(transaction_hash);
-			return trans.convertTransaction(latestTransResponse);
-		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
+			System.out.println("가즈아!");
+			EthTransaction txs = web3j.ethGetTransactionByHash(transaction_hash).send();
+			org.web3j.protocol.core.methods.response.Transaction t = txs.getTransaction().get();
+			EthereumTransaction txxx = EthereumTransaction.convertTransaction(t);
+			System.out.println("무사히 도착");
+			return txxx;
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return trans;
+		System.out.println("이건 나오면 안되는 문장입니다.");
+		return null;
 	}
 
 	/**
