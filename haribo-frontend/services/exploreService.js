@@ -26,6 +26,13 @@ var exploreService = {
     findCurrentTransaction : function(callback){
         $.get(API_BASE_URL + "/api/eth/trans",function(data){
             console.log(data)
+            callback(data)
         })
-    }
+    },
+    searchBlockByHash : function(hash, callback) {
+      $.get(API_BASE_URL + "/api/eth/trans/" + hash, function(data){
+        console.log("최종적으로 들어왔움.",data);
+        callback(data)
+      })
+    },
 }

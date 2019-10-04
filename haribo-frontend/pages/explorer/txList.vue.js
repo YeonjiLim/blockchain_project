@@ -18,7 +18,7 @@ var explorerTxListView = Vue.component("ExplorerTxListView", {
                                 <div class="row tx-info" v-for="item in transactions">
                                     <div class="col-md-2">Tx</div>
                                     <div class="col-md-4">
-                                        <router-link :to="{name: 'explorer.tx.detail', params: { hash: item.hash }}" class="tx-number">{{ item.hash | truncate(10) }}</router-link>
+                                        <router-link :to="{name: 'explorer.tx.detail', params: { hash: item.txHash }}" class="tx-number">{{ item.txHash | truncate(10) }}</router-link>
                                         <p class="tx-timestamp">{{ item.timeSince }}</p>
                                     </div>
                                     <div class="col-md-6">
@@ -46,12 +46,12 @@ var explorerTxListView = Vue.component("ExplorerTxListView", {
        */
       var scope = this;
       exploreService.findCurrentTransaction(function(data){
-        // console.log(data)
-        //   for (let index = 0; index < data.length; index++) {
-        //       scope.contracts.push(data[index].contract_address)
-        //   }
-        //   scope.items = data;
-        //   console.log(scope.contracts)
+        console.log("반환값: " + data)
+          for (let index = 0; index < data.length; index++) {
+              scope.transactions.push(data[index].contract_address)
+          }
+          scope.transactions = data;
+          console.log(scope.transactions)
       })
     }
   },
