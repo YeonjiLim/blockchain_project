@@ -141,11 +141,11 @@ public class AuctionService implements IAuctionService
 		auction.setStatus("C");
 		
 		AuctionInfo ai=auctionContractService.searchAuctionInfo(auction.getContract_address());
-		if(member_id!=0) {
-			Bid bid=bidRepository.search(auction_id, ai.getHighest_bidder(), ai.getHighest_bid());
-			bid.setWinning_bid("Y");
-			bidRepository.update(bid);
-		}
+//		if(member_id!=0) {
+//			Bid bid=bidRepository.search(auction_id, ai.getHighest_bidder(), ai.getHighest_bid());
+//			bid.setWinning_bid("Y");
+//			bidRepository.update(bid);
+//		}
 		auctionRepository.update(auction);
 		return auction;
 	}

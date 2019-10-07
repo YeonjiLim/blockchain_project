@@ -131,7 +131,7 @@ public class AuctionContractService implements IAuctionContractService {
 				AUCTION_FACTORY_CONTRACT, web3j, credentials, contractGasProvider);
 		try {
 			List<String> auctionlist = auctionFactoryContract.allAuctions().send();
-			//System.out.println(auctionlist);
+			System.out.println(auctionlist);
 			return auctionlist;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
