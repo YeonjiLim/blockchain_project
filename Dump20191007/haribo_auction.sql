@@ -1,0 +1,62 @@
+-- MySQL dump 10.13  Distrib 8.0.16, for Win64 (x86_64)
+--
+-- Host: 54.180.148.38    Database: haribo
+-- ------------------------------------------------------
+-- Server version	8.0.11
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+ SET NAMES utf8 ;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `auction`
+--
+
+DROP TABLE IF EXISTS `auction`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE `auction` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `creation_date` timestamp NOT NULL,
+  `auction_creater_id` int(11) NOT NULL,
+  `auction_item_id` int(11) NOT NULL,
+  `status` char(1) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `start_date` timestamp NOT NULL,
+  `end_date` timestamp NOT NULL,
+  `lowest_price` decimal(25,0) NOT NULL,
+  `contract_address` varchar(45) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FK_경매1` (`auction_creater_id`),
+  KEY `FK_경매2` (`auction_item_id`),
+  CONSTRAINT `FK_경매1` FOREIGN KEY (`auction_creater_id`) REFERENCES `auction_member` (`id`),
+  CONSTRAINT `FK_경매2` FOREIGN KEY (`auction_item_id`) REFERENCES `item` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auction`
+--
+
+LOCK TABLES `auction` WRITE;
+/*!40000 ALTER TABLE `auction` DISABLE KEYS */;
+INSERT INTO `auction` VALUES (67,'2019-10-07 06:42:42',33,270,'E','2019-10-06 23:00:00','2019-10-07 23:00:00',1,'0x22C27073fc61a6bba794cB3266829F97DFE50DeA'),(68,'2019-10-07 07:18:52',32,270,'V','2019-10-06 23:00:00','2019-10-07 23:00:00',1,'0x0bBd483d32377010c8c5a77C0179de4A009b2B12'),(69,'2019-10-07 07:22:43',32,269,'V','2019-10-06 23:00:00','2019-10-07 23:00:00',1,'0xbBB27FABED94ded2B4101DD556c4C4834E7dDA48'),(70,'2019-10-07 07:35:09',32,270,'C','2019-09-29 06:00:00','2019-10-29 06:00:00',1,'0xFe69f50773b0D7f6602a9AEF97f15a166D0F2758'),(71,'2019-10-07 07:39:49',32,271,'C','2019-09-29 06:00:00','2019-10-29 06:00:00',1,'0x56a6C63f176AE4472BA7b3d77ded16797d1f7abC'),(72,'2019-10-07 07:43:10',32,271,'C','2019-10-06 23:00:00','2019-10-07 23:00:00',1,'0x4dC3639AeC276490D3e0cdaF1E188bc70cF925aa');
+/*!40000 ALTER TABLE `auction` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2019-10-07 17:18:20

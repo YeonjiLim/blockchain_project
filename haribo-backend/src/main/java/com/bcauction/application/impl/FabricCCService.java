@@ -412,7 +412,7 @@ public class FabricCCService implements IFabricCCService
 						o = reader.readObject();
 						FabricAsset fa= getAssetRecord(o);
 						System.out.println(fa+"AAA");
-						
+						list.add(fa);
 					}
 				} catch (InvalidArgumentException e) {
 					e.printStackTrace();
