@@ -108,15 +108,20 @@ public class EthereumController {
             throw new EmptyListException("NO DATA");
 
         List<AuctionInfo> auction_info_list = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = auction_list.size()-1; i >= 0; i--) {
         	AuctionInfo auction_info = this.auctionContractService.searchAuctionInfo(auction_list.get(i));
-            auction_info_list.add(auction_info);
+        	if(auction_info != null) {
+        		auction_info_list.add(auction_info);
+        		if(auction_info_list.size() == 10) {
+        			break;
+        		}
+        	}
 		}
 //        auction_list.forEach(auction -> {
 //            AuctionInfo auction_info = this.auctionContractService.searchAuctionInfo(auction);
 //            auction_info_list.add(auction_info);
 //        });
-
+        System.out.println(auction_info_list);
         return auction_info_list;
     }
 
